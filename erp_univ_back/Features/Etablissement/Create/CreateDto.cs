@@ -1,4 +1,4 @@
-namespace erp_univ_back.Features.Etablissement.CreateEtablissement;
+namespace erp_univ_back.Features.Etablissement.Create;
 
 using System.ComponentModel.DataAnnotations;
 using erp_univ_back.Shared.Entities;

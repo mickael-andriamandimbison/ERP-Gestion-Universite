@@ -1,4 +1,4 @@
-using erp_univ_back.Features.Etablissement.CreateEtablissement;
+using erp_univ_back.Features.Etablissement.Create;
 using Microsoft.AspNetCore.Mvc;
 
 namespace erp_univ_back.Features.Etablissement.CreateEtablissement;

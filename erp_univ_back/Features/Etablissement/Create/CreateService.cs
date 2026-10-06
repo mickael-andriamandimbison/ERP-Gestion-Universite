@@ -1,11 +1,11 @@
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Entities;
 using erp_univ_back.Shared.Exceptions;
-using erp_univ_back.Features.Etablissement.CreateEtablissement;
+using erp_univ_back.Features.Etablissement.Create;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-namespace erp_univ_back.Features.Etablissement.CreateEtablissement;
+namespace erp_univ_back.Features.Etablissement.Create;
 
 public interface ICreateService
 {
