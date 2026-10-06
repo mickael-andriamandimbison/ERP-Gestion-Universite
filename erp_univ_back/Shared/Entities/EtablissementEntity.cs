@@ -1,0 +1,62 @@
+namespace erp_univ_back.Shared.Entities;
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public enum StatusEtablissement
+{
+    Actif,
+    Inactif,
+    Suspendu
+}
+
+[Table("etablissements")]
+public class EtablissementEntity : BaseEntity
+{
+
+    [Required]
+    [MaxLength(100)]
+    public required string Nom { get; set; }
+
+    [Required]
+    [MaxLength(200)]
+    public required string Adresse { get; set; }
+
+    [Required]
+    [MaxLength(10)]
+    public required string CodePostal { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public required string Ville { get; set; }
+
+    [Required]
+    public required string Pays { get; set; }
+
+    [Required]
+    [MaxLength(20)]
+    public required string Telephone { get; set; }
+
+    [Required]
+    [EmailAddress]
+    [MaxLength(50)]
+    public required string Email { get; set; }
+
+    [MaxLength(100)]
+    [Url]
+    public string? SiteWeb { get; set; }
+
+    [MaxLength(200)]
+    public string? Logo { get; set; }
+
+
+    [MaxLength(30)]
+    public string? Sigle { get; set; }
+
+    [MaxLength(500)]
+    public string? Description { get; set; }
+
+    [Required]
+    public StatusEtablissement Statut { get; set; } = StatusEtablissement.Actif;
+
+}
