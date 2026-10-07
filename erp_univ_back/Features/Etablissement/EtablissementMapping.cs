@@ -8,7 +8,6 @@ public class EtablissementMapping : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        // mapping pour la creation d'etablissement
         config.NewConfig<EtablissementRequest, EtablissementEntity>()
             .Ignore(dest => dest.Id)
             .Ignore(dest => dest.DateCreation)
