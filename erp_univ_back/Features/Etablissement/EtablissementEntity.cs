@@ -1,7 +1,8 @@
-namespace erp_univ_back.Shared.Entities;
+namespace erp_univ_back.Features.Etablissement;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using erp_univ_back.Shared.Entities;
 
 public enum StatusEtablissement
 {

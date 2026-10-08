@@ -1,24 +1,25 @@
+using erp_univ_back.Shared.Data;
+using Mapster;
+using erp_univ_back.Features.Etablissement.Create;
+using erp_univ_back.Shared.Exceptions;
+
 namespace erp_univ_back.Features.Etablissement.Update;
 
+public interface IUpdateService
 {
-    public interface IUpdateService
-    {
-        Task ExecuteAsync(UpdateEtablissementRequest request);
-    }
+    Task<EtablissementResponse> ExecuteAsync(Guid id, EtablissementRequest request);
+}
 
-    public class UpdateService(ErpUnivDbContext db) : IUpdateService
+public class UpdateService(ErpUnivDbContext db) : IUpdateService
+{
+    public async Task<EtablissementResponse> ExecuteAsync(Guid id, EtablissementRequest request)
     {
-        public async Task ExecuteAsync(UpdateEtablissementRequest request)
-        {
-            var etablissement = await db.Etablissements.FindAsync(request.Id);
-            if (etablissement is null)
-            {
-                throw new NotFoundException("Etablissement non trouvé");
-            }
-            etablissement.Nom = request.Nom;
-            etablissement.Code = request.Code;
-            etablissement.DateModification = DateTime.Now;
-            await db.SaveChangesAsync(ct);
-        }
+        var etablissement = await db.Etablissements.FindAsync(id)
+            ?? throw new NotFoundException("Etablissement non trouvé");
+
+        request.Adapt(etablissement);
+        await db.SaveChangesAsync();
+
+        return etablissement.Adapt<EtablissementResponse>();
     }
 }

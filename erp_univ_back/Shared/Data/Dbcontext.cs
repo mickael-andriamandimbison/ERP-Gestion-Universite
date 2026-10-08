@@ -1,6 +1,7 @@
 namespace erp_univ_back.Shared.Data;
 
 using Microsoft.EntityFrameworkCore;
+using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Shared.Entities;
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options) : DbContext(options)

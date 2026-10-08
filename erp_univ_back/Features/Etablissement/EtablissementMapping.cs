@@ -1,5 +1,4 @@
 using Mapster;
-using erp_univ_back.Shared.Entities;
 using erp_univ_back.Features.Etablissement.Create;
 
 namespace erp_univ_back.Features.Etablissement;

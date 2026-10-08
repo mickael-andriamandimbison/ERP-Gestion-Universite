@@ -5,12 +5,12 @@ namespace erp_univ_back.Features.Etablissement.Delete;
 
 public interface IDeleteService
 {
-    Task ExecuteAsync(Guid id, CancellationToken ct);
+    Task ExecuteAsync(Guid id);
 }
 
 public class DeleteService(ErpUnivDbContext db) : IDeleteService
 {
-    public async Task ExecuteAsync(Guid id, CancellationToken ct)
+    public async Task ExecuteAsync(Guid id)
     {
         var etablissement = await db.Etablissements.FindAsync(id);
         if (etablissement is null)
@@ -18,6 +18,6 @@ public class DeleteService(ErpUnivDbContext db) : IDeleteService
             throw new NotFoundException("Etablissement non trouvé");
         }
         db.Etablissements.Remove(etablissement);
-        await db.SaveChangesAsync(ct);
+        await db.SaveChangesAsync();
     }
 }

@@ -7,9 +7,9 @@ namespace erp_univ_back.Features.Etablissement.Delete;
 public class DeleteController(IDeleteService _service) : ControllerBase
 {
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id,CancellationToken ct)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        await _service.ExecuteAsync(id,ct);
+        await _service.ExecuteAsync(id);
         return Ok(new { message = "Etablissement supprimé avec succès" });
     }
 }
