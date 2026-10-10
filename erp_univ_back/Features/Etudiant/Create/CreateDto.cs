@@ -19,7 +19,8 @@ namespace erp_univ_back.Features.Etudiant.Create
         string? Prenom,
         string NumeroTelephone,
         string Profession,
-        Role Role
+        Role Role,
+        string? Email = null
     );
 
     public record CreateEtudiantResponse(

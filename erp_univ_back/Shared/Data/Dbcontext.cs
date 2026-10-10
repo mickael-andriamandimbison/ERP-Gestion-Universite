@@ -8,11 +8,10 @@ using erp_univ_back.Shared.Services;
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
 {
-
-    public DbSet<EtablissementEntity> Etablissements { get; set; }
-    public DbSet<EtudiantEntity> Etudiants { get; set; }
-    public DbSet<EtudiantParentEntity> EtudiantParents { get; set; }
-    public DbSet<ParentEntity> Parents { get; set; }
+    public DbSet<EtablissementEntity> Etablissements { get; set; } = null!;
+    public DbSet<EtudiantEntity> Etudiants { get; set; } = null!;
+    public DbSet<EtudiantParentEntity> EtudiantParents { get; set; } = null!;
+    public DbSet<ParentEntity> Parents { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder mb)
     {

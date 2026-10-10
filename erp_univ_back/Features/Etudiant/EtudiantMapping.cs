@@ -1,5 +1,6 @@
 using Mapster;
 using erp_univ_back.Features.Etudiant.Create;
+using erp_univ_back.Features.Etudiant.GetAll;
 
 namespace erp_univ_back.Features.Etudiant
 {
@@ -7,6 +8,9 @@ namespace erp_univ_back.Features.Etudiant
     {
         public void Register(TypeAdapterConfig config)
         {
+            config.NewConfig<EtudiantEntity, EtudiantGetAllResponse>()
+                .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
+
             config.NewConfig<CreateEtudiantRequest, EtudiantEntity>()
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.DateCreation)
