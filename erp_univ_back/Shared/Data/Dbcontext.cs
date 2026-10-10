@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Shared.Entities;
 using erp_univ_back.Features.Etudiant;
+using erp_univ_back.Shared.Services;
 
-public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options) : DbContext(options)
+public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
 {
 
     public DbSet<EtablissementEntity> Etablissements { get; set; }
@@ -25,28 +26,50 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options) : DbCo
 
         mb.Entity<EtudiantEntity>(e =>
         {
+            e.HasQueryFilter(e => e.EtablissementId == _tenantService.EtablissementId);
             e.HasKey(x => x.Id);
-            e.HasIndex(x => x.Matricule).IsUnique();
-            e.HasIndex(x => x.NumeroCin).IsUnique();
-            e.HasIndex(x => x.NumeroTelphone).IsUnique();
-            e.Property(x => x.NumeroTelphone).HasConversion<string>().HasMaxLength(20);
+            e.HasIndex(x => x.Matricule)
+            .IsUnique();
+            e.HasIndex(x => x.NumeroCin)
+            .IsUnique();
+            e.HasIndex(x => x.NumeroTelphone)
+            .IsUnique();
+            e.Property(x => x.NumeroTelphone)
+            .HasConversion<string>()
+            .HasMaxLength(20);
+            e.HasOne(x => x.Etablissement)
+            .WithMany(x => x.Etudiants)
+            .HasForeignKey(x => x.EtablissementId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         });
 
         mb.Entity<ParentEntity>(e =>
         {
             e.HasKey(x => x.Id);
-            e.HasIndex(x => x.NumeroTelphone).IsUnique();
-            e.Property(x => x.NumeroTelphone).HasMaxLength(20);
+            e.HasIndex(x => x.NumeroTelphone)
+            .IsUnique();
+            e.Property(x => x.NumeroTelphone)
+            .HasMaxLength(20);
 
         });
 
         mb.Entity<EtudiantParentEntity>(e =>
         {
             e.HasKey(x => x.Id);
-            e.HasOne(x => x.Etudiant).WithMany(x => x.EtudiantParents).HasForeignKey(x => x.EtudiantId);
-            e.HasOne(x => x.Parent).WithMany(x => x.EtudiantParents).HasForeignKey(x => x.ParentId);
-            e.Property(x => x.Role).HasConversion<string>().HasMaxLength(10);
+            e.HasOne(x => x.Etudiant)
+            .WithMany(x => x.EtudiantParents)
+            .HasForeignKey(x => x.EtudiantId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(x => x.Parent)
+            .WithMany(x => x.EtudiantParents)
+            .HasForeignKey(x => x.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            e.Property(x => x.Role)
+            .HasConversion<string>()
+            .HasMaxLength(10);
         });
     }
 
@@ -59,6 +82,13 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options) : DbCo
             {
                 entry.Entity.DateCreation = DateTime.UtcNow;
                 entry.Entity.DateModification = DateTime.UtcNow;
+
+                var hasEtablissementId = entry.Properties.Any(p => p.Metadata.Name == "EtablissementId");
+
+                if (hasEtablissementId && _tenantService.EtablissementId.HasValue)
+                {
+                    entry.Property("EtablissementId").CurrentValue = _tenantService.EtablissementId.Value;
+                }
             }
             else
             {

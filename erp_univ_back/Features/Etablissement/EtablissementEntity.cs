@@ -1,6 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using erp_univ_back.Features.Etudiant;
 using erp_univ_back.Shared.Entities;
 
 namespace erp_univ_back.Features.Etablissement
@@ -61,6 +62,8 @@ namespace erp_univ_back.Features.Etablissement
 
         [Required]
         public StatusEtablissement Statut { get; set; } = StatusEtablissement.Actif;
+
+        public ICollection<EtudiantEntity> Etudiants { get; set; } = [];
 
     }
 }

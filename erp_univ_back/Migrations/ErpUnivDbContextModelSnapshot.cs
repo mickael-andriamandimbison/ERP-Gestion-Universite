@@ -116,6 +116,9 @@ namespace erp_univ_back.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("LieuNaissance")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -145,6 +148,8 @@ namespace erp_univ_back.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EtablissementId");
 
                     b.HasIndex("Matricule")
                         .IsUnique();
@@ -232,23 +237,39 @@ namespace erp_univ_back.Migrations
                     b.ToTable("parents");
                 });
 
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("Etudiants")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+                });
+
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantParentEntity", b =>
                 {
                     b.HasOne("erp_univ_back.Features.Etudiant.EtudiantEntity", "Etudiant")
                         .WithMany("EtudiantParents")
                         .HasForeignKey("EtudiantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("erp_univ_back.Features.Etudiant.ParentEntity", "Parent")
                         .WithMany("EtudiantParents")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Etudiant");
 
                     b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etablissement.EtablissementEntity", b =>
+                {
+                    b.Navigation("Etudiants");
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>

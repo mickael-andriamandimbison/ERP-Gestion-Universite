@@ -31,17 +31,17 @@ namespace erp_univ_back.Features.Etudiant.Create
             // Traitement des parents
             foreach (var parentDto in request.Parents)
             {
-                // Chercher un parent existant avec ce numéro (même parent, plusieurs enfants)
+                // Chercher un parent existant 
                 var parent = await _db.Parents.FirstOrDefaultAsync(p => p.NumeroTelphone == parentDto.NumeroTelephone);
 
                 if (parent is null)
                 {
-                    // Parent inconnu → créer un nouveau
+                    //créer un nouveau
                     parent = parentDto.Adapt<ParentEntity>();
                     parent.NumeroTelphone = parentDto.NumeroTelephone;
                 }
 
-                // Créer le lien EtudiantParentEntity
+                // Créer le lien EtudiantParent
                 var lien = new EtudiantParentEntity
                 {
                     Role = parentDto.Role,
@@ -58,9 +58,12 @@ namespace erp_univ_back.Features.Etudiant.Create
             {
                 await _db.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                throw new ConflictException("Un conflit est survenu lors de l'enregistrement : email, téléphone ou données parent déjà existants.");
+                // On capture le message exact de PostgreSQL pour comprendre d'où vient le conflit
+                var vraiMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                
+                throw new ConflictException($"Conflit technique : {vraiMessage}");
             }
 
             return new CreateEtudiantResponse(etudiant.Id, etudiant.Matricule);

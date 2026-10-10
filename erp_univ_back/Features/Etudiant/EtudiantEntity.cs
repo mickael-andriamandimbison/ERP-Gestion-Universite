@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Shared.Entities;
 
 namespace erp_univ_back.Features.Etudiant
@@ -12,7 +13,8 @@ namespace erp_univ_back.Features.Etudiant
         Tuteur
     }
 
-    public enum Statut{
+    public enum Statut
+    {
 
     }
 
@@ -47,6 +49,9 @@ namespace erp_univ_back.Features.Etudiant
         [Required]
         [EmailAddress]
         public required string Email { get; set; }
+
+        public required Guid EtablissementId { get; set; }
+        public EtablissementEntity Etablissement { get; set; } = null!;
 
         public ICollection<EtudiantParentEntity> EtudiantParents { get; set; } = [];
     }
