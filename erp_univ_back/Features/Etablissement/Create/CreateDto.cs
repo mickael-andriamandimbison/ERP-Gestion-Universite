@@ -1,39 +1,38 @@
-namespace erp_univ_back.Features.Etablissement.Create;
-
 using System.ComponentModel.DataAnnotations;
-using erp_univ_back.Shared.Entities;
-
-public class EtablissementRequest
+namespace erp_univ_back.Features.Etablissement.Create
 {
-    [Required, MaxLength(100)] public required string Nom { get; set; }
-    [Required, MaxLength(200)] public required string Adresse { get; set; }
-    [Required, MaxLength(10)] public required string CodePostal { get; set; }
-    [Required, MaxLength(50)] public required string Ville { get; set; }
-    [Required, MaxLength(50)] public required string Pays { get; set; }
-    [Required, MaxLength(20)] public required string Telephone { get; set; }
-    [Required, EmailAddress, MaxLength(100)] public required string Email { get; set; }
-    [Url, MaxLength(100)] public string? SiteWeb { get; set; }
-    [MaxLength(200)] public string? Logo { get; set; }
-    [MaxLength(30)] public string? Sigle { get; set; }
-    [MaxLength(500)] public string? Description { get; set; }
-    public StatusEtablissement Statut { get; set; } = StatusEtablissement.Actif;
+    public record EtablissementRequest(
+        [Required, MaxLength(100)] string Nom,
+        [Required, MaxLength(200)] string Adresse,
+        [Required, MaxLength(10)] string CodePostal,
+        [Required, MaxLength(50)] string Ville,
+        [Required, MaxLength(50)] string Pays,
+        [Required, MaxLength(20)] string Telephone,
+        [Required, EmailAddress, MaxLength(100)] string Email,
+        [Url, MaxLength(100)] string? SiteWeb = null,
+        [MaxLength(200)] string? Logo = null,
+        [MaxLength(30)] string? Sigle = null,
+        [MaxLength(500)] string? Description = null,
+        StatusEtablissement Statut = StatusEtablissement.Actif
+    );
+
+    public record EtablissementResponse(
+        Guid Id,
+        string Nom,
+        string Adresse,
+        string CodePostal,
+        string Ville,
+        string Pays,
+        string Telephone,
+        string Email,
+        string? SiteWeb,
+        string? Logo,
+        string? Sigle,
+        string? Description,
+        StatusEtablissement Statut,
+        DateTime DateCreation,
+        DateTime DateModification
+    );
 }
 
-public class EtablissementResponse
-{
-    public Guid Id { get; set; }
-    public string Nom { get; set; } = string.Empty;
-    public string Adresse { get; set; } = string.Empty;
-    public string CodePostal { get; set; } = string.Empty;
-    public string Ville { get; set; } = string.Empty;
-    public string Pays { get; set; } = string.Empty;
-    public string Telephone { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string? SiteWeb { get; set; }
-    public string? Logo { get; set; }
-    public string? Sigle { get; set; }
-    public string? Description { get; set; }
-    public StatusEtablissement Statut { get; set; }
-    public DateTime DateCreation { get; set; }
-    public DateTime DateModification { get; set; }
-}
+

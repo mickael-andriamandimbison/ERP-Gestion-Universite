@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace erp_univ_back.Features.Etablissement.Delete;
-
-[ApiController]
-[Route("api/etablissements")]
-public class DeleteController(IDeleteService _service) : ControllerBase
+namespace erp_univ_back.Features.Etablissement.Delete
 {
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+
+    [ApiController]
+    [Route("api/etablissements")]
+    public class DeleteController(IDeleteService _service) : ControllerBase
     {
-        await _service.ExecuteAsync(id);
-        return Ok(new { message = "Etablissement supprimé avec succès" });
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            await _service.ExecuteAsync(id);
+            return Ok(new { message = "Etablissement supprimé avec succès" });
+        }
     }
 }

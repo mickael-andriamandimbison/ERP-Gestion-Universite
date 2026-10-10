@@ -1,9 +1,9 @@
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
 
-namespace erp_univ_back.Features.Etablissement.Delete;
-
-public interface IDeleteService
+namespace erp_univ_back.Features.Etablissement.Delete
+{
+    public interface IDeleteService
 {
     Task ExecuteAsync(Guid id);
 }
@@ -20,4 +20,5 @@ public class DeleteService(ErpUnivDbContext db) : IDeleteService
         db.Etablissements.Remove(etablissement);
         await db.SaveChangesAsync();
     }
+}
 }

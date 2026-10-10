@@ -1,33 +1,37 @@
-namespace erp_univ_back.Features.Etablissement.Create;
-
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-public interface ICreateService
+namespace erp_univ_back.Features.Etablissement.Create
 {
-    Task<EtablissementResponse> ExecuteAsync(EtablissementRequest request);
-}
-
-public class CreateService(ErpUnivDbContext _db) : ICreateService
-{
-    public async Task<EtablissementResponse> ExecuteAsync(EtablissementRequest request)
+    public interface ICreateService
     {
-        if (await _db.Etablissements.AnyAsync(e => e.Nom == request.Nom))
-            throw new ConflictException($"Un établissement avec le nom '{request.Nom}' existe déjà.");
+        Task<EtablissementResponse> ExecuteAsync(EtablissementRequest request);
+    }
 
-        if (await _db.Etablissements.AnyAsync(e => e.Email == request.Email))
-            throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée par un autre établissement.");
+    public class CreateService(ErpUnivDbContext _db) : ICreateService
+    {
+        public async Task<EtablissementResponse> ExecuteAsync(EtablissementRequest request)
+        {
+            if (await _db.Etablissements.AnyAsync(e => e.Nom == request.Nom))
+                throw new ConflictException($"Un établissement avec le nom '{request.Nom}' existe déjà.");
 
-        if (await _db.Etablissements.AnyAsync(e => e.Telephone == request.Telephone))
-            throw new ConflictException($"Le numéro de téléphone '{request.Telephone}' est déjà enregistré.");
+            if (await _db.Etablissements.AnyAsync(e => e.Email == request.Email))
+                throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée par un autre établissement.");
 
-        var entity = request.Adapt<EtablissementEntity>();
-        _db.Etablissements.Add(entity);
-        await _db.SaveChangesAsync();
+            if (await _db.Etablissements.AnyAsync(e => e.Telephone == request.Telephone))
+                throw new ConflictException($"Le numéro de téléphone '{request.Telephone}' est déjà enregistré.");
 
-        return entity.Adapt<EtablissementResponse>();
+            var entity = request.Adapt<EtablissementEntity>();
+            _db.Etablissements.Add(entity);
+            await _db.SaveChangesAsync();
+
+            return entity.Adapt<EtablissementResponse>();
+        }
+
     }
 
 }
+
+

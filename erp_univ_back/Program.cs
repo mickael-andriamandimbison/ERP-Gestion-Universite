@@ -11,7 +11,7 @@ builder.Services.AddDbContext<ErpUnivDbContext>((opt) => opt.UseNpgsql(builder.C
 
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>()
-    .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service") || c.Name.EndsWith("Repository")))
+    .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service") || c.Name.EndsWith("Repository") || c.Name.EndsWith("Generator")))
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
@@ -20,7 +20,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 builder.Services.AddOpenApi();
 
-// Mapster : scan automatique de toutes les classes IRegister de l'assembly
+
 var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
 typeAdapterConfig.Scan(typeof(Program).Assembly);
 

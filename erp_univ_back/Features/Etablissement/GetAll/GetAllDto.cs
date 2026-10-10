@@ -1,26 +1,24 @@
-namespace erp_univ_back.Features.Etablissement.GetAll;
-
-public class GetAllEtablissementsRequest
+namespace erp_univ_back.Features.Etablissement.GetAll
 {
-    public string? Recherche { get; set; }
-    public string? Ville { get; set; }
+    public record GetAllEtablissementsRequest(
+        string? Recherche = null,
+        string? Ville = null,
+        string ChampTri = "Nom",
+        bool TriDecroissant = false,
+        int Page = 1,
+        int TaillePage = 10
+    );
 
-    public string ChampTri { get; set; } = "Nom";
-    public bool TriDecroissant { get; set; } = false;
-
-    public int Page { get; set; } = 1;
-    public int TaillePage { get; set; } = 10;
+    public record PagedResponse<T>(
+        IEnumerable<T> Elements,
+        int Page,
+        int TaillePage,
+        int TotalElements,
+        int TotalPages
+    )
+    {
+        public bool APagePrecedente => Page > 1;
+        public bool APageSuivante => Page < TotalPages;
+    }
 }
 
-public class PagedResponse<T>
-{
-    public IEnumerable<T> Elements { get; set; } = [];
-
-    public int Page { get; set; }
-    public int TaillePage { get; set; }
-    public int TotalElements { get; set; }
-    public int TotalPages { get; set; }
-
-    public bool APagePrecedente => Page > 1;
-    public bool APageSuivante => Page < TotalPages;
-}

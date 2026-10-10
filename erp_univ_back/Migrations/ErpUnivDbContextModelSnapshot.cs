@@ -22,7 +22,7 @@ namespace erp_univ_back.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("erp_univ_back.Shared.Entities.EtablissementEntity", b =>
+            modelBuilder.Entity("erp_univ_back.Features.Etablissement.EtablissementEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,6 +95,170 @@ namespace erp_univ_back.Migrations
                         .IsUnique();
 
                     b.ToTable("etablissements");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("DateNaissance")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LieuNaissance")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Matricule")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NumeroCin")
+                        .HasMaxLength(17)
+                        .HasColumnType("character varying(17)");
+
+                    b.Property<string>("NumeroTelphone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Prenom")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Matricule")
+                        .IsUnique();
+
+                    b.HasIndex("NumeroCin")
+                        .IsUnique();
+
+                    b.HasIndex("NumeroTelphone")
+                        .IsUnique();
+
+                    b.ToTable("etudiants");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantParentEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EtudiantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EtudiantId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("etudiant_parent");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.ParentEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NumeroTelphone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Prenom")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Profession")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NumeroTelphone")
+                        .IsUnique();
+
+                    b.ToTable("parents");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantParentEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etudiant.EtudiantEntity", "Etudiant")
+                        .WithMany("EtudiantParents")
+                        .HasForeignKey("EtudiantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("erp_univ_back.Features.Etudiant.ParentEntity", "Parent")
+                        .WithMany("EtudiantParents")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Etudiant");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>
+                {
+                    b.Navigation("EtudiantParents");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.ParentEntity", b =>
+                {
+                    b.Navigation("EtudiantParents");
                 });
 #pragma warning restore 612, 618
         }
