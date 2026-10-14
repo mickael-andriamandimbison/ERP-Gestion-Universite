@@ -5,6 +5,7 @@ using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Shared.Entities;
 using erp_univ_back.Features.Etudiant;
 using erp_univ_back.Shared.Services;
+using erp_univ_back.Features.Professeur;
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
 {
@@ -12,7 +13,7 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     public DbSet<EtudiantEntity> Etudiants { get; set; } = null!;
     public DbSet<EtudiantParentEntity> EtudiantParents { get; set; } = null!;
     public DbSet<ParentEntity> Parents { get; set; } = null!;
-
+    public DbSet<ProfesseurEntity> Professeurs { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder mb)
     {
         base.OnModelCreating(mb);
@@ -41,6 +42,23 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
             .HasForeignKey(x => x.EtablissementId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        });
+
+        mb.Entity<ProfesseurEntity>(e =>
+        {
+            e.HasQueryFilter(x => x.EtablissementId == _tenantService.EtablissementId);
+            e.HasIndex(x => x.Matricule).IsUnique();
+            e.HasIndex(x => x.NumeroCin)
+            .IsUnique();
+            e.HasIndex(x => x.NumeroTelephone)
+            .IsUnique();
+            e.Property(x => x.NumeroTelephone)
+            .HasConversion<string>()
+            .HasMaxLength(20);
+            e.HasOne(x => x.Etablissement)
+            .WithMany(x => x.Professeurs)
+            .HasForeignKey(x => x.EtablissementId)
+            .OnDelete(DeleteBehavior.Restrict);
         });
 
         mb.Entity<ParentEntity>(e =>

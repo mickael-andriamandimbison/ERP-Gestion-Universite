@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using erp_univ_back.Features.Etudiant;
+using erp_univ_back.Features.Professeur;
 using erp_univ_back.Shared.Entities;
 
 namespace erp_univ_back.Features.Etablissement
@@ -65,5 +66,6 @@ namespace erp_univ_back.Features.Etablissement
 
         public ICollection<EtudiantEntity> Etudiants { get; set; } = [];
 
+        public ICollection<ProfesseurEntity> Professeurs {get;set;} = [];
     }
 }

@@ -237,6 +237,72 @@ namespace erp_univ_back.Migrations
                     b.ToTable("parents");
                 });
 
+            modelBuilder.Entity("erp_univ_back.Features.Professeur.ProfesseurEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("DateNaissance")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LieuNaissance")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Matricule")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NumeroCin")
+                        .IsRequired()
+                        .HasMaxLength(17)
+                        .HasColumnType("character varying(17)");
+
+                    b.Property<string>("NumeroTelephone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Prenom")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EtablissementId");
+
+                    b.HasIndex("Matricule")
+                        .IsUnique();
+
+                    b.HasIndex("NumeroCin")
+                        .IsUnique();
+
+                    b.HasIndex("NumeroTelephone")
+                        .IsUnique();
+
+                    b.ToTable("professeurs");
+                });
+
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>
                 {
                     b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
@@ -267,9 +333,22 @@ namespace erp_univ_back.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("erp_univ_back.Features.Professeur.ProfesseurEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("Professeurs")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+                });
+
             modelBuilder.Entity("erp_univ_back.Features.Etablissement.EtablissementEntity", b =>
                 {
                     b.Navigation("Etudiants");
+
+                    b.Navigation("Professeurs");
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>

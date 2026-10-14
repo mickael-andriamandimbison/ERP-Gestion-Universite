@@ -2,7 +2,7 @@ using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-
+using erp_univ_back.Shared.Utils;
 namespace erp_univ_back.Features.Etudiant.Create
 {
     public interface ICreateService
@@ -20,7 +20,7 @@ namespace erp_univ_back.Features.Etudiant.Create
             if (await _db.Etudiants.AnyAsync(e => e.NumeroTelphone == request.NumeroTelephone))
                 throw new ConflictException($"Le numéro de téléphone '{request.NumeroTelephone}' est déjà enregistré.");
 
-            var matricule = await _matriculeGenerator.GenererAsync();
+            var matricule = await _matriculeGenerator.GenererAsync(true);
 
             // Création de l'entité étudiant via Mapster
             var etudiant = request.Adapt<EtudiantEntity>();
@@ -62,7 +62,7 @@ namespace erp_univ_back.Features.Etudiant.Create
             {
                 // On capture le message exact de PostgreSQL pour comprendre d'où vient le conflit
                 var vraiMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                
+
                 throw new ConflictException($"Conflit technique : {vraiMessage}");
             }
 

@@ -19,7 +19,7 @@ namespace erp_univ_back.Features.Etudiant
     }
 
     [Table("etudiants")]
-    public class EtudiantEntity : BaseEntity
+    public class EtudiantEntity  : BaseEntity
     {
         [Required]
         [MaxLength(60)]
