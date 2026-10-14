@@ -1,5 +1,6 @@
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Responses;
+using erp_univ_back.Shared.Utils;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using erp_univ_back.Features.Etablissement.Create;
@@ -24,7 +25,7 @@ namespace erp_univ_back.Features.Etablissement.GetAll
 
             if (!string.IsNullOrWhiteSpace(request.Recherche))
             {
-                var motif = $"%{Echapper(request.Recherche.Trim())}%";
+                var motif = QueryHelper.VersMotifRecherche(request.Recherche);
                 query = query.Where(e =>
                     EF.Functions.ILike(e.Nom, motif) ||
                     (e.Sigle != null && EF.Functions.ILike(e.Sigle, motif)));
@@ -32,7 +33,7 @@ namespace erp_univ_back.Features.Etablissement.GetAll
 
             if (!string.IsNullOrWhiteSpace(request.Ville))
             {
-                var ville = Echapper(request.Ville.Trim());
+                var ville = QueryHelper.Echapper(request.Ville.Trim());
                 query = query.Where(e => EF.Functions.ILike(e.Ville, ville));
             }
 
@@ -62,9 +63,6 @@ namespace erp_univ_back.Features.Etablissement.GetAll
                 totalPages
             );
         }
-
-        private static string Echapper(string valeur) =>
-            valeur.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
     }
 }
 

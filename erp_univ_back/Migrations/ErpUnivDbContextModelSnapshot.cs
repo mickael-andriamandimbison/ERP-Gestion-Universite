@@ -22,6 +22,43 @@ namespace erp_univ_back.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("erp_univ_back.Features.AnneeAcademique.AnneeAcademiqueEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("DateDebut")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("DateFin")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("EstActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EtablissementId", "Libelle")
+                        .IsUnique();
+
+                    b.ToTable("AnneeAcademiques");
+                });
+
             modelBuilder.Entity("erp_univ_back.Features.Etablissement.EtablissementEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -303,6 +340,17 @@ namespace erp_univ_back.Migrations
                     b.ToTable("professeurs");
                 });
 
+            modelBuilder.Entity("erp_univ_back.Features.AnneeAcademique.AnneeAcademiqueEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("AnneeAcademiques")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+                });
+
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>
                 {
                     b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
@@ -346,6 +394,8 @@ namespace erp_univ_back.Migrations
 
             modelBuilder.Entity("erp_univ_back.Features.Etablissement.EtablissementEntity", b =>
                 {
+                    b.Navigation("AnneeAcademiques");
+
                     b.Navigation("Etudiants");
 
                     b.Navigation("Professeurs");

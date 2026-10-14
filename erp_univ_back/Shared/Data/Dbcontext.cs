@@ -2,10 +2,11 @@ namespace erp_univ_back.Shared.Data;
 
 using Microsoft.EntityFrameworkCore;
 using erp_univ_back.Features.Etablissement;
-using erp_univ_back.Shared.Entities;
 using erp_univ_back.Features.Etudiant;
 using erp_univ_back.Shared.Services;
 using erp_univ_back.Features.Professeur;
+using erp_univ_back.Features.AnneeAcademique;
+using erp_univ_back.Shared.Entities;
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
 {
@@ -14,6 +15,8 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     public DbSet<EtudiantParentEntity> EtudiantParents { get; set; } = null!;
     public DbSet<ParentEntity> Parents { get; set; } = null!;
     public DbSet<ProfesseurEntity> Professeurs { get; set; } = null!;
+
+    public DbSet<AnneeAcademiqueEntity> AnneeAcademiques { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder mb)
     {
         base.OnModelCreating(mb);
@@ -87,6 +90,29 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
             e.Property(x => x.Role)
             .HasConversion<string>()
             .HasMaxLength(10);
+        });
+
+        mb.Entity<AnneeAcademiqueEntity>(e =>
+        {
+            e.HasQueryFilter(x => x.EtablissementId == _tenantService.EtablissementId);
+            e.HasOne(x => x.Etablissement)
+            .WithMany(x => x.AnneeAcademiques)
+            .HasForeignKey(x => x.EtablissementId)
+            .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.EtablissementId, x.Libelle }).IsUnique();
+            e.Property(x=>x.Libelle)
+            .HasMaxLength(15)
+            .IsRequired();
+
+            e.Property(x=>x.DateDebut)
+            .IsRequired();
+
+            e.Property(x=>x.DateFin)
+            .IsRequired();
+
+            e.Property(x=>x.EstActive)
+            .IsRequired();
+
         });
     }
 
