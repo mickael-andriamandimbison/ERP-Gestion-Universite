@@ -15,7 +15,6 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     public DbSet<EtudiantParentEntity> EtudiantParents { get; set; } = null!;
     public DbSet<ParentEntity> Parents { get; set; } = null!;
     public DbSet<ProfesseurEntity> Professeurs { get; set; } = null!;
-
     public DbSet<AnneeAcademiqueEntity> AnneeAcademiques { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder mb)
     {

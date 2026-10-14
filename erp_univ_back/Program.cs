@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Mapster;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using erp_univ_back.Shared.Middlewares;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +41,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 app.UseAuthorization();
+app.UseMiddleware<TenantMiddleware>();
 app.MapControllers();
 
 app.Run();

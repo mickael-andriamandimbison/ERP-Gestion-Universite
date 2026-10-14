@@ -1,23 +1,17 @@
-namespace erp_univ_back.Shared.Services
-{
-    public interface ITenantService
-    {
-        Guid? EtablissementId { get; }
-    }
+namespace erp_univ_back.Shared.Services;
 
-    public class TenantService(IHttpContextAccessor _httpContextAccessor) : ITenantService
+public interface ITenantService
+{
+    Guid? EtablissementId { get; }
+    void DefinirEtablissement(Guid etablissementId);
+}
+
+public class TenantService : ITenantService
+{
+    public Guid? EtablissementId { get; private set; }
+
+    public void DefinirEtablissement(Guid etablissementId)
     {
-        public Guid? EtablissementId
-        {
-            get
-            {
-                var header = _httpContextAccessor.HttpContext?.Request.Headers["X-EtablissementId"].FirstOrDefault();
-                if (string.IsNullOrEmpty(header) || !Guid.TryParse(header, out var id))
-                {
-                    throw new UnauthorizedAccessException("Etablissement non trouvé");
-                }
-                return id;
-            }
-        }
+        EtablissementId = etablissementId;
     }
 }
