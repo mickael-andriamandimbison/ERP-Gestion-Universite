@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace erp_univ_back.Features.Etablissement.Create
 {
-
     [ApiController]
     [Route("api/etablissements")]
     public class CreateController(ICreateService _createService) : ControllerBase
@@ -10,9 +9,9 @@ namespace erp_univ_back.Features.Etablissement.Create
         [HttpPost]
         [ProducesResponseType(typeof(EtablissementResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> CreateEtablissement([FromBody] EtablissementRequest request)
+        public async Task<IActionResult> CreateEtablissement([FromBody] EtablissementRequest request, CancellationToken ct)
         {
-            var response = await _createService.ExecuteAsync(request);
+            var response = await _createService.ExecuteAsync(request, ct);
             return CreatedAtAction(nameof(CreateEtablissement), new { id = response.Id }, response);
         }
     }

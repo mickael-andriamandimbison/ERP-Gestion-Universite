@@ -1,6 +1,7 @@
 using Mapster;
 using erp_univ_back.Features.Etudiant.Create;
 using erp_univ_back.Features.Etudiant.GetAll;
+using erp_univ_back.Features.Etudiant.Update;
 
 namespace erp_univ_back.Features.Etudiant
 {
@@ -11,12 +12,25 @@ namespace erp_univ_back.Features.Etudiant
             config.NewConfig<EtudiantEntity, EtudiantGetAllResponse>()
                 .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
 
+            config.NewConfig<EtudiantEntity, UpdateEtudiantResponse>()
+                .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
+
             config.NewConfig<CreateEtudiantRequest, EtudiantEntity>()
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.DateCreation)
                 .Ignore(dest => dest.DateModification)
                 .Ignore(dest => dest.Matricule) 
                 .Map(dest => dest.EtudiantParents, src => src.Parents);
+
+            config.NewConfig<UpdateEtudiantRequest, EtudiantEntity>()
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.DateCreation)
+                .Ignore(dest => dest.DateModification)
+                .Ignore(dest => dest.Matricule)
+                .Ignore(dest => dest.EtablissementId)
+                .Ignore(dest => dest.Etablissement)
+                .Ignore(dest => dest.EtudiantParents)
+                .Map(dest => dest.NumeroTelphone, src => src.NumeroTelephone);
 
             config.NewConfig<CreateParentDto, EtudiantParentEntity>()
                 .Ignore(dest => dest.Id)

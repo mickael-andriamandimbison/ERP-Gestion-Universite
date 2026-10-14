@@ -3,24 +3,25 @@ using erp_univ_back.Shared.Exceptions;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using erp_univ_back.Shared.Utils;
+
 namespace erp_univ_back.Features.Etudiant.Create
 {
     public interface ICreateService
     {
-        Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request);
+        Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request, CancellationToken ct = default);
     }
 
     public class CreateService(ErpUnivDbContext _db, IMatriculeGenerator _matriculeGenerator) : ICreateService
     {
-        public async Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request)
+        public async Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request, CancellationToken ct = default)
         {
-            if (await _db.Etudiants.AnyAsync(e => e.Email == request.Email))
+            if (await _db.Etudiants.AnyAsync(e => e.Email == request.Email, ct))
                 throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée par un autre étudiant.");
 
-            if (await _db.Etudiants.AnyAsync(e => e.NumeroTelphone == request.NumeroTelephone))
+            if (await _db.Etudiants.AnyAsync(e => e.NumeroTelphone == request.NumeroTelephone, ct))
                 throw new ConflictException($"Le numéro de téléphone '{request.NumeroTelephone}' est déjà enregistré.");
 
-            var matricule = await _matriculeGenerator.GenererAsync(true);
+            var matricule = await _matriculeGenerator.GenererAsync(true, ct);
 
             // Création de l'entité étudiant via Mapster
             var etudiant = request.Adapt<EtudiantEntity>();
@@ -32,7 +33,7 @@ namespace erp_univ_back.Features.Etudiant.Create
             foreach (var parentDto in request.Parents)
             {
                 // Chercher un parent existant 
-                var parent = await _db.Parents.FirstOrDefaultAsync(p => p.NumeroTelphone == parentDto.NumeroTelephone);
+                var parent = await _db.Parents.FirstOrDefaultAsync(p => p.NumeroTelphone == parentDto.NumeroTelephone, ct);
 
                 if (parent is null)
                 {
@@ -56,7 +57,7 @@ namespace erp_univ_back.Features.Etudiant.Create
 
             try
             {
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync(ct);
             }
             catch (DbUpdateException ex)
             {

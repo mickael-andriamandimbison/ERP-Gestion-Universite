@@ -91,7 +91,7 @@ namespace erp_univ_back.Features.Etudiant.Import
                         Parents: parents
                     );
 
-                    await _createService.ExecuteAsync(createRequest);
+                    await _createService.ExecuteAsync(createRequest, cancellationToken);
                     succes++;
                 }
                 catch (Exception ex)
