@@ -1,4 +1,6 @@
+using erp_univ_back.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
+
 namespace erp_univ_back.Features.Etudiant.GetAll
 {
     [ApiController]
@@ -6,14 +8,12 @@ namespace erp_univ_back.Features.Etudiant.GetAll
     public class GetAllController(IGetAllEtudiantService _service) : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<EtudiantGetAllResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResponse<EtudiantGetAllResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public async Task<IActionResult> GetAll(CancellationToken ct)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllEtudiantRequest request, CancellationToken ct)
         {
-            var result = await _service.ExecuteAsync(ct);
+            var result = await _service.ExecuteAsync(request, ct);
             return Ok(result);
         }
     }
-
 }

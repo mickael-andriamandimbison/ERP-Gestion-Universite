@@ -1,3 +1,5 @@
+using erp_univ_back.Shared.Responses;
+
 namespace erp_univ_back.Features.Etablissement.GetAll
 {
     public record GetAllEtablissementsRequest(
@@ -8,17 +10,4 @@ namespace erp_univ_back.Features.Etablissement.GetAll
         int Page = 1,
         int TaillePage = 10
     );
-
-    public record PagedResponse<T>(
-        IEnumerable<T> Elements,
-        int Page,
-        int TaillePage,
-        int TotalElements,
-        int TotalPages
-    )
-    {
-        public bool APagePrecedente => Page > 1;
-        public bool APageSuivante => Page < TotalPages;
-    }
 }
-

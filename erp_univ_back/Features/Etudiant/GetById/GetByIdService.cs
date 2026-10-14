@@ -14,7 +14,7 @@ namespace erp_univ_back.Features.Etudiant.GetById
     {
         public async Task<EtudiantEntity> ExecuteAsync(Guid id, CancellationToken ct)
         {
-            var etudiant = await _db.Etudiants.FirstOrDefaultAsync(x => x.Id == id, ct);
+            var etudiant = await _db.Etudiants.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, ct);
             return etudiant ?? throw new NotFoundException("Etudiant introuvable.");
         }
     }

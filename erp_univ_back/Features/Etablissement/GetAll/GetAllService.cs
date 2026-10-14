@@ -1,4 +1,5 @@
 using erp_univ_back.Shared.Data;
+using erp_univ_back.Shared.Responses;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using erp_univ_back.Features.Etablissement.Create;
@@ -37,12 +38,12 @@ namespace erp_univ_back.Features.Etablissement.GetAll
 
             query = (request.ChampTri?.ToLower(), request.TriDecroissant) switch
             {
-                ("ville", false) => query.OrderBy(e => e.Ville),
-                ("ville", true) => query.OrderByDescending(e => e.Ville),
+                ("ville", false) => query.OrderBy(e => e.Ville).ThenByDescending(e => e.DateCreation),
+                ("ville", true) => query.OrderByDescending(e => e.Ville).ThenByDescending(e => e.DateCreation),
                 ("datecreation", false) => query.OrderBy(e => e.DateCreation),
                 ("datecreation", true) => query.OrderByDescending(e => e.DateCreation),
-                (_, true) => query.OrderByDescending(e => e.Nom),
-                _ => query.OrderBy(e => e.Nom)
+                (_, true) => query.OrderByDescending(e => e.Nom).ThenByDescending(e => e.DateCreation),
+                _ => query.OrderBy(e => e.Nom).ThenByDescending(e => e.DateCreation)
             };
 
             var totalElements = await query.CountAsync(ct);

@@ -13,7 +13,7 @@ namespace erp_univ_back.Features.Professeur.GetById
     {
         public async Task<ProfesseurEntity> ExecuteAsync(Guid id, CancellationToken ct)
         {
-            var professeur = await _db.Professeurs.FirstOrDefaultAsync(x => x.Id == id, ct);
+            var professeur = await _db.Professeurs.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, ct);
             return professeur ?? throw new NotFoundException("Professeur introuvable.");
         }
     }
