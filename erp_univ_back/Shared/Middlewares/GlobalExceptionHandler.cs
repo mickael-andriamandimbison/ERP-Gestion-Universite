@@ -14,7 +14,6 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> _logger) : I
         string titre;
         string detail = exception.Message;
 
-        // Le middleware vérifie si l'erreur vient d'un de vos "throw" dans le service
         if (exception is AppException ex)
         {
             statusCode = ex.StatusCode;
@@ -23,14 +22,12 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> _logger) : I
         }
         else
         {
-            // C'est un vrai crash imprévu (Ex: Base de données en panne)
             statusCode = StatusCodes.Status500InternalServerError;
             titre = "Erreur Interne";
             detail = "Une erreur technique imprévue est survenue.";
             _logger.LogError(exception, "CRASH TECHNIQUE APPLICATIF !");
         }
 
-        // Format standardisé professionnel pour les erreurs (RFC 9457)
         var problemDetails = new ProblemDetails
         {
             Status = statusCode,

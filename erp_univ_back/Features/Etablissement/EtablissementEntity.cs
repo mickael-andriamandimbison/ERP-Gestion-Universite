@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using erp_univ_back.Features.AnneeAcademique;
 using erp_univ_back.Features.Etudiant;
+using erp_univ_back.Features.Filiere;
+using erp_univ_back.Features.FiliereNiveau;
+using erp_univ_back.Features.Niveau;
 using erp_univ_back.Features.Professeur;
 using erp_univ_back.Shared.Entities;
 
@@ -70,5 +73,13 @@ namespace erp_univ_back.Features.Etablissement
         public ICollection<ProfesseurEntity> Professeurs { get; set; } = [];
 
         public ICollection<AnneeAcademiqueEntity> AnneeAcademiques { get; set; } = [];
+
+        public ICollection<FiliereEntity> Filieres { get; set; } = [];
+
+        public ICollection<NiveauEntity> Niveaux { get; set; } = [];
+
+        public ICollection<FiliereNiveauEntity> FiliereNiveaux { get; set; } = [];
+
+        public ICollection<ParentEntity> Parents { get; set; } = [];
     }
 }

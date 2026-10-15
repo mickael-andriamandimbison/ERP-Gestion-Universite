@@ -186,15 +186,13 @@ namespace erp_univ_back.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EtablissementId");
-
-                    b.HasIndex("Matricule")
+                    b.HasIndex("EtablissementId", "Matricule")
                         .IsUnique();
 
-                    b.HasIndex("NumeroCin")
+                    b.HasIndex("EtablissementId", "NumeroCin")
                         .IsUnique();
 
-                    b.HasIndex("NumeroTelphone")
+                    b.HasIndex("EtablissementId", "NumeroTelphone")
                         .IsUnique();
 
                     b.ToTable("etudiants");
@@ -225,9 +223,10 @@ namespace erp_univ_back.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EtudiantId");
-
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("EtudiantId", "ParentId")
+                        .IsUnique();
 
                     b.ToTable("etudiant_parent");
                 });
@@ -246,6 +245,9 @@ namespace erp_univ_back.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -268,10 +270,119 @@ namespace erp_univ_back.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NumeroTelphone")
+                    b.HasIndex("EtablissementId", "NumeroTelphone")
                         .IsUnique();
 
                     b.ToTable("parents");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Filiere.FiliereEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EtablissementId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("filieres");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.FiliereNiveau.FiliereNiveauEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FiliereId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LibelleAffiche")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<Guid>("NiveauId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FiliereId");
+
+                    b.HasIndex("NiveauId");
+
+                    b.HasIndex("EtablissementId", "FiliereId", "NiveauId")
+                        .IsUnique();
+
+                    b.ToTable("filiere_niveaux");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Niveau.NiveauEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EtablissementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Ordre")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EtablissementId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("niveaux");
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Professeur.ProfesseurEntity", b =>
@@ -326,15 +437,13 @@ namespace erp_univ_back.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EtablissementId");
-
-                    b.HasIndex("Matricule")
+                    b.HasIndex("EtablissementId", "Matricule")
                         .IsUnique();
 
-                    b.HasIndex("NumeroCin")
+                    b.HasIndex("EtablissementId", "NumeroCin")
                         .IsUnique();
 
-                    b.HasIndex("NumeroTelephone")
+                    b.HasIndex("EtablissementId", "NumeroTelephone")
                         .IsUnique();
 
                     b.ToTable("professeurs");
@@ -381,6 +490,66 @@ namespace erp_univ_back.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("erp_univ_back.Features.Etudiant.ParentEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("Parents")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Filiere.FiliereEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("Filieres")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.FiliereNiveau.FiliereNiveauEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("FiliereNiveaux")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("erp_univ_back.Features.Filiere.FiliereEntity", "Filiere")
+                        .WithMany("FiliereNiveaux")
+                        .HasForeignKey("FiliereId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("erp_univ_back.Features.Niveau.NiveauEntity", "Niveau")
+                        .WithMany("FiliereNiveaux")
+                        .HasForeignKey("NiveauId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+
+                    b.Navigation("Filiere");
+
+                    b.Navigation("Niveau");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Niveau.NiveauEntity", b =>
+                {
+                    b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
+                        .WithMany("Niveaux")
+                        .HasForeignKey("EtablissementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Etablissement");
+                });
+
             modelBuilder.Entity("erp_univ_back.Features.Professeur.ProfesseurEntity", b =>
                 {
                     b.HasOne("erp_univ_back.Features.Etablissement.EtablissementEntity", "Etablissement")
@@ -398,6 +567,14 @@ namespace erp_univ_back.Migrations
 
                     b.Navigation("Etudiants");
 
+                    b.Navigation("FiliereNiveaux");
+
+                    b.Navigation("Filieres");
+
+                    b.Navigation("Niveaux");
+
+                    b.Navigation("Parents");
+
                     b.Navigation("Professeurs");
                 });
 
@@ -409,6 +586,16 @@ namespace erp_univ_back.Migrations
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.ParentEntity", b =>
                 {
                     b.Navigation("EtudiantParents");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Filiere.FiliereEntity", b =>
+                {
+                    b.Navigation("FiliereNiveaux");
+                });
+
+            modelBuilder.Entity("erp_univ_back.Features.Niveau.NiveauEntity", b =>
+                {
+                    b.Navigation("FiliereNiveaux");
                 });
 #pragma warning restore 612, 618
         }

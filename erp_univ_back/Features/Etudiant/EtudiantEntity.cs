@@ -5,7 +5,6 @@ using erp_univ_back.Shared.Entities;
 
 namespace erp_univ_back.Features.Etudiant
 {
-
     public enum Role
     {
         Pere,
@@ -15,11 +14,14 @@ namespace erp_univ_back.Features.Etudiant
 
     public enum Statut
     {
-
+        Actif,
+        Inactif,
+        Diplome,
+        Abandonne
     }
 
     [Table("etudiants")]
-    public class EtudiantEntity  : BaseEntity
+    public class EtudiantEntity : BaseEntity
     {
         [Required]
         [MaxLength(60)]
@@ -50,7 +52,7 @@ namespace erp_univ_back.Features.Etudiant
         [EmailAddress]
         public required string Email { get; set; }
 
-        public required Guid EtablissementId { get; set; }
+        public Guid EtablissementId { get; set; }
         public EtablissementEntity Etablissement { get; set; } = null!;
 
         public ICollection<EtudiantParentEntity> EtudiantParents { get; set; } = [];
@@ -77,6 +79,9 @@ namespace erp_univ_back.Features.Etudiant
         [EmailAddress]
         public string? Email { get; set; }
 
+        public Guid EtablissementId { get; set; }
+        public EtablissementEntity Etablissement { get; set; } = null!;
+
         public ICollection<EtudiantParentEntity> EtudiantParents { get; set; } = [];
     }
 
@@ -90,7 +95,5 @@ namespace erp_univ_back.Features.Etudiant
 
         public Guid EtudiantId { get; set; }
         public EtudiantEntity Etudiant { get; set; } = null!;
-
     }
-
 }
