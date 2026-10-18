@@ -8,10 +8,10 @@ namespace erp_univ_back.Features.Professeur
     [Table("professeurs")]
     public class ProfesseurEntity : BaseEntity
     {
-         [Required]
+        [Required]
         [MaxLength(60)]
         public required string Matricule { get; set; }
-        
+
         [Required]
         [MaxLength(100)]
         public required string Nom { get; set; }
@@ -37,7 +37,7 @@ namespace erp_univ_back.Features.Professeur
         [MaxLength(100)]
         public required string LieuNaissance { get; set; }
 
-        public required Guid EtablissementId {get;set;}
-        public EtablissementEntity Etablissement {get;set;} = null!;
+        public required Guid EtablissementId { get; set; }
+        public EtablissementEntity Etablissement { get; set; } = null!;
     }
 }

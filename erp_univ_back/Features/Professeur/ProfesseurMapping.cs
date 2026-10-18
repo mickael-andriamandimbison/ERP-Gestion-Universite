@@ -1,4 +1,6 @@
 using erp_univ_back.Features.Professeur.Create;
+using erp_univ_back.Features.Professeur.GetAll;
+using erp_univ_back.Features.Professeur.GetById;
 using erp_univ_back.Features.Professeur.Update;
 using Mapster;
 
@@ -20,6 +22,10 @@ namespace erp_univ_back.Features.Professeur
                 .Ignore(dest => dest.DateModification)
                 .Ignore(dest => dest.EtablissementId)
                 .Ignore(dest => dest.Etablissement);
+
+            config.NewConfig<ProfesseurEntity, CreateProfResponse>();
+            config.NewConfig<ProfesseurEntity, ProfesseurGetByIdResponse>();
+            config.NewConfig<ProfesseurEntity, ProfesseurResponse>();
         }
     }
 }

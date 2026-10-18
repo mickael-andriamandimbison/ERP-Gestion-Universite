@@ -1,7 +1,8 @@
-using Mapster;
 using erp_univ_back.Features.Etudiant.Create;
 using erp_univ_back.Features.Etudiant.GetAll;
+using erp_univ_back.Features.Etudiant.GetById;
 using erp_univ_back.Features.Etudiant.Update;
+using Mapster;
 
 namespace erp_univ_back.Features.Etudiant
 {
@@ -12,6 +13,9 @@ namespace erp_univ_back.Features.Etudiant
             config.NewConfig<EtudiantEntity, EtudiantGetAllResponse>()
                 .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
 
+            config.NewConfig<EtudiantEntity, EtudiantGetByIdResponse>()
+                .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
+
             config.NewConfig<EtudiantEntity, UpdateEtudiantResponse>()
                 .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
 
@@ -19,7 +23,7 @@ namespace erp_univ_back.Features.Etudiant
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.DateCreation)
                 .Ignore(dest => dest.DateModification)
-                .Ignore(dest => dest.Matricule) 
+                .Ignore(dest => dest.Matricule)
                 .Map(dest => dest.EtudiantParents, src => src.Parents);
 
             config.NewConfig<UpdateEtudiantRequest, EtudiantEntity>()

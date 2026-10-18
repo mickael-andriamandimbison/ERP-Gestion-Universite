@@ -8,12 +8,12 @@ namespace erp_univ_back.Features.Professeur.Create
 {
     public interface ICreateService
     {
-        Task<ProfesseurEntity> ExecuteAsync(CreateProfRequest request, CancellationToken ct = default);
+        Task<CreateProfResponse> ExecuteAsync(CreateProfRequest request, CancellationToken ct = default);
     }
 
     public class CreateService(ErpUnivDbContext _db, IMatriculeGenerator _matricule) : ICreateService
     {
-        public async Task<ProfesseurEntity> ExecuteAsync(CreateProfRequest request, CancellationToken ct = default)
+        public async Task<CreateProfResponse> ExecuteAsync(CreateProfRequest request, CancellationToken ct = default)
         {
             if (await _db.Professeurs.AnyAsync(x => x.Email == request.Email, ct))
                 throw new ConflictException($"L'email {request.Email} est deja utilisé");
@@ -33,7 +33,7 @@ namespace erp_univ_back.Features.Professeur.Create
 
             await _db.SaveChangesAsync(ct);
 
-            return prof;
+            return prof.Adapt<CreateProfResponse>();
         }
     }
 }

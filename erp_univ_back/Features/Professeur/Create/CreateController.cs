@@ -7,6 +7,8 @@ namespace erp_univ_back.Features.Professeur.Create
     public class CreateController(ICreateService _service) : ControllerBase
     {
         [HttpPost]
+        [ProducesResponseType(typeof(CreateProfResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> CreateProf([FromBody] CreateProfRequest request, CancellationToken ct)
         {
             var response = await _service.ExecuteAsync(request, ct);

@@ -9,7 +9,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> _logger) : I
         Exception exception,
         CancellationToken cancellationToken)
     {
-        
+
         int statusCode;
         string titre;
         string detail = exception.Message;
@@ -39,6 +39,6 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> _logger) : I
         httpContext.Response.StatusCode = statusCode;
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
-        return true; 
+        return true;
     }
 }

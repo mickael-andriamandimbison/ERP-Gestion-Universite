@@ -12,14 +12,14 @@ namespace erp_univ_back.Features.AnneeAcademique
 
         [Required]
         [MaxLength(20)]
-        public required string Libelle { get; set; } = string.Empty; 
+        public required string Libelle { get; set; } = string.Empty;
 
         [Required]
         public required DateOnly DateDebut { get; set; }
-        
+
         [Required]
         public required DateOnly DateFin { get; set; }
-        
+
         public bool EstActive { get; set; } = false;
 
         public Guid EtablissementId { get; set; }

@@ -13,9 +13,9 @@ namespace erp_univ_back.Features.Etudiant.Import
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ImportEtudiants([FromForm] ImportFileRequest? request, CancellationToken cancellationToken)
         {
-            var file = request?.File 
-                ?? (Request.HasFormContentType 
-                    ? Request.Form.Files["file"] ?? Request.Form.Files["File"] ?? Request.Form.Files.FirstOrDefault() 
+            var file = request?.File
+                ?? (Request.HasFormContentType
+                    ? Request.Form.Files["file"] ?? Request.Form.Files["File"] ?? Request.Form.Files.FirstOrDefault()
                     : null);
 
             if (file == null || file.Length == 0)
