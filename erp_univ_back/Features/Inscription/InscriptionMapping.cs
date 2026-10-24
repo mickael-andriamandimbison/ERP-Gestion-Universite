@@ -2,6 +2,7 @@ namespace erp_univ_back.Features.Inscription;
 
 using erp_univ_back.Features.Inscription.Create;
 using erp_univ_back.Features.Inscription.GetByClasse;
+using erp_univ_back.Features.Inscription.GetByEtudiant;
 using Mapster;
 
 public class InscriptionMapping : IRegister
@@ -36,6 +37,19 @@ public class InscriptionMapping : IRegister
             .Map(dest => dest.Prenom, src => src.Etudiant.Prenom)
             .Map(dest => dest.Email, src => src.Etudiant.Email)
             .Map(dest => dest.NumeroTelephone, src => src.Etudiant.NumeroTelphone)
+            .Map(dest => dest.Statut, src => src.Statut)
+            .Map(dest => dest.DateInscription, src => src.DateCreation);
+
+        config.NewConfig<InscriptionEntity, InscriptionByEtudiantResponse>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.FiliereNiveauId, src => src.FiliereNiveauId)
+            .Map(dest => dest.FiliereNom, src => src.FiliereNiveau.Filiere.Nom)
+            .Map(dest => dest.NiveauNom, src => src.FiliereNiveau.Niveau.Nom)
+            .Map(dest => dest.ClasseLibelle, src => !string.IsNullOrWhiteSpace(src.FiliereNiveau.LibelleAffiche)
+                ? src.FiliereNiveau.LibelleAffiche
+                : $"{src.FiliereNiveau.Niveau.Nom} {src.FiliereNiveau.Filiere.Nom}")
+            .Map(dest => dest.AnneeAcademiqueId, src => src.AnneeAcademiqueId)
+            .Map(dest => dest.AnneeAcademiqueLibelle, src => src.AnneeAcademique.Libelle)
             .Map(dest => dest.Statut, src => src.Statut)
             .Map(dest => dest.DateInscription, src => src.DateCreation);
     }
