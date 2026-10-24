@@ -9,6 +9,7 @@ using erp_univ_back.Features.AnneeAcademique;
 using erp_univ_back.Features.Filiere;
 using erp_univ_back.Features.Niveau;
 using erp_univ_back.Features.FiliereNiveau;
+using erp_univ_back.Features.Inscription;
 using erp_univ_back.Shared.Entities;
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
@@ -22,6 +23,7 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     public DbSet<FiliereEntity> Filieres { get; set; } = null!;
     public DbSet<NiveauEntity> Niveaux { get; set; } = null!;
     public DbSet<FiliereNiveauEntity> FiliereNiveaux { get; set; } = null!;
+    public DbSet<InscriptionEntity> Inscriptions { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
@@ -189,6 +191,40 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
 
             e.HasOne(x => x.Etablissement)
                 .WithMany(x => x.FiliereNiveaux)
+                .HasForeignKey(x => x.EtablissementId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // --- 10. Inscription ---
+        mb.Entity<InscriptionEntity>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasQueryFilter(x => x.EtablissementId == _tenantService.EtablissementId);
+
+            e.Property(x => x.Statut)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            // Index unique composé anti-doublon (EtablissementId, EtudiantId, FiliereNiveauId, AnneeAcademiqueId)
+            e.HasIndex(x => new { x.EtablissementId, x.EtudiantId, x.FiliereNiveauId, x.AnneeAcademiqueId }).IsUnique();
+
+            e.HasOne(x => x.Etudiant)
+                .WithMany(x => x.Inscriptions)
+                .HasForeignKey(x => x.EtudiantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(x => x.FiliereNiveau)
+                .WithMany(x => x.Inscriptions)
+                .HasForeignKey(x => x.FiliereNiveauId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(x => x.AnneeAcademique)
+                .WithMany(x => x.Inscriptions)
+                .HasForeignKey(x => x.AnneeAcademiqueId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(x => x.Etablissement)
+                .WithMany(x => x.Inscriptions)
                 .HasForeignKey(x => x.EtablissementId)
                 .OnDelete(DeleteBehavior.Restrict);
         });

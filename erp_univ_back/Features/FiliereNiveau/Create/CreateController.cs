@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/filiere-niveaux")]
-public class CreateFiliereNiveauController(ICreateFiliereNiveauService service) : ControllerBase
+public class CreateController(ICreateFiliereNiveauService service) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(typeof(CreateFiliereNiveauResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> CreerAsync([FromBody] CreateFiliereNiveauRequest request, CancellationToken ct)
+    public async Task<IActionResult> Creer([FromBody] CreateFiliereNiveauRequest request, CancellationToken ct)
     {
         var response = await service.ExecuteAsync(request, ct);
-        return CreatedAtAction(nameof(CreerAsync), new { id = response.Id }, response);
+        return CreatedAtAction(nameof(Creer), new { id = response.Id }, response);
     }
 }

@@ -2,6 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using erp_univ_back.Features.Etablissement;
+using erp_univ_back.Features.Inscription;
 using erp_univ_back.Shared.Entities;
 
 namespace erp_univ_back.Features.AnneeAcademique
@@ -24,5 +25,7 @@ namespace erp_univ_back.Features.AnneeAcademique
 
         public Guid EtablissementId { get; set; }
         public EtablissementEntity Etablissement { get; set; } = null!;
+
+        public ICollection<InscriptionEntity> Inscriptions { get; set; } = [];
     }
 }

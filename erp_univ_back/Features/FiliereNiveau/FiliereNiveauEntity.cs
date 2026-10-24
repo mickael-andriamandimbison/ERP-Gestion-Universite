@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Features.Filiere;
+using erp_univ_back.Features.Inscription;
 using erp_univ_back.Features.Niveau;
 using erp_univ_back.Shared.Entities;
 
@@ -21,5 +22,7 @@ public class FiliereNiveauEntity : BaseEntity
 
     public Guid EtablissementId { get; set; }
     public EtablissementEntity Etablissement { get; set; } = null!;
+
+    public ICollection<InscriptionEntity> Inscriptions { get; set; } = [];
 }
 

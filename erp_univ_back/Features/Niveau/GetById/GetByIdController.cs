@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/niveaux")]
-public class GetNiveauByIdController(IGetNiveauByIdService service) : ControllerBase
+public class GetByIdController(IGetNiveauByIdService service) : ControllerBase
 {
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(NiveauDetailResponse), StatusCodes.Status200OK)]

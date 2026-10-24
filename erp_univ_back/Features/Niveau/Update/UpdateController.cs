@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/niveaux")]
-public class UpdateNiveauController(IUpdateNiveauService service) : ControllerBase
+public class UpdateController(IUpdateNiveauService service) : ControllerBase
 {
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(NiveauResponse), StatusCodes.Status200OK)]

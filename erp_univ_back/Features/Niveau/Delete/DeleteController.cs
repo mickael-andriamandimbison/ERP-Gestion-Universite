@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/niveaux")]
-public class DeleteNiveauController(IDeleteNiveauService service) : ControllerBase
+public class DeleteController(IDeleteNiveauService service) : ControllerBase
 {
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

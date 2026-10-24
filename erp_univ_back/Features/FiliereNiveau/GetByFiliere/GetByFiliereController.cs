@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/filiere-niveaux")]
-public class GetNiveauxByFiliereController(IGetNiveauxByFiliereService service) : ControllerBase
+public class GetByFiliereController(IGetNiveauxByFiliereService service) : ControllerBase
 {
     [HttpGet("by-filiere/{filiereId:guid}")]
     [ProducesResponseType(typeof(List<FiliereNiveauResponse>), StatusCodes.Status200OK)]
