@@ -10,14 +10,9 @@ public class EtudiantMapping : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<EtudiantEntity, GetAllEtudiantResponse>()
-            .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
-
-        config.NewConfig<EtudiantEntity, GetEtudiantByIdResponse>()
-            .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
-
-        config.NewConfig<EtudiantEntity, UpdateEtudiantResponse>()
-            .Map(dest => dest.NumeroTelephone, src => src.NumeroTelphone);
+        config.NewConfig<EtudiantEntity, GetAllEtudiantResponse>();
+        config.NewConfig<EtudiantEntity, GetEtudiantByIdResponse>();
+        config.NewConfig<EtudiantEntity, UpdateEtudiantResponse>();
 
         config.NewConfig<CreateEtudiantRequest, EtudiantEntity>()
             .Ignore(dest => dest.Id)
@@ -33,8 +28,7 @@ public class EtudiantMapping : IRegister
             .Ignore(dest => dest.Matricule)
             .Ignore(dest => dest.EtablissementId)
             .Ignore(dest => dest.Etablissement)
-            .Ignore(dest => dest.EtudiantParents)
-            .Map(dest => dest.NumeroTelphone, src => src.NumeroTelephone);
+            .Ignore(dest => dest.EtudiantParents);
 
         config.NewConfig<CreateParentDto, EtudiantParentEntity>()
             .Ignore(dest => dest.Id)

@@ -20,7 +20,7 @@ public class UpdateEtudiantService(ErpUnivDbContext _db) : IUpdateEtudiantServic
         if (await _db.Etudiants.AnyAsync(x => x.Id != id && x.Email == request.Email, ct))
             throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée par un autre étudiant.");
 
-        if (await _db.Etudiants.AnyAsync(x => x.Id != id && x.NumeroTelphone == request.NumeroTelephone, ct))
+        if (await _db.Etudiants.AnyAsync(x => x.Id != id && x.NumeroTelephone == request.NumeroTelephone, ct))
             throw new ConflictException($"Le numéro de téléphone '{request.NumeroTelephone}' est déjà enregistré.");
 
         if (!string.IsNullOrWhiteSpace(request.NumeroCin) &&
@@ -30,7 +30,7 @@ public class UpdateEtudiantService(ErpUnivDbContext _db) : IUpdateEtudiantServic
         }
 
         request.Adapt(etudiant);
-        etudiant.NumeroTelphone = request.NumeroTelephone;
+        etudiant.NumeroTelephone = request.NumeroTelephone;
         etudiant.DateModification = DateTime.UtcNow;
 
         await _db.SaveChangesAsync(ct);

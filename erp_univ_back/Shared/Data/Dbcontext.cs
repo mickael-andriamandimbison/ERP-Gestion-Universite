@@ -45,9 +45,9 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
 
             e.HasIndex(x => new { x.EtablissementId, x.Matricule }).IsUnique();
             e.HasIndex(x => new { x.EtablissementId, x.NumeroCin }).IsUnique();
-            e.HasIndex(x => new { x.EtablissementId, x.NumeroTelphone }).IsUnique();
+            e.HasIndex(x => new { x.EtablissementId, x.NumeroTelephone }).IsUnique();
 
-            e.Property(x => x.NumeroTelphone)
+            e.Property(x => x.NumeroTelephone)
                 .HasConversion<string>()
                 .HasMaxLength(20);
 

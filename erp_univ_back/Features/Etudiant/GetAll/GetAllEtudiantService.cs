@@ -30,7 +30,7 @@ public class GetAllEtudiantService(ErpUnivDbContext _db) : IGetAllEtudiantServic
                 (e.Prenom != null && EF.Functions.ILike(e.Prenom, motif)) ||
                 EF.Functions.ILike(e.Matricule, motif) ||
                 EF.Functions.ILike(e.Email, motif) ||
-                EF.Functions.ILike(e.NumeroTelphone, motif) ||
+                EF.Functions.ILike(e.NumeroTelephone, motif) ||
                 (e.NumeroCin != null && EF.Functions.ILike(e.NumeroCin, motif)));
         }
 

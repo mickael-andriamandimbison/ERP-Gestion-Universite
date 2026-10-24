@@ -18,7 +18,7 @@ public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _ma
         if (await _db.Etudiants.AnyAsync(e => e.Email == request.Email, ct))
             throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée par un autre étudiant.");
 
-        if (await _db.Etudiants.AnyAsync(e => e.NumeroTelphone == request.NumeroTelephone, ct))
+        if (await _db.Etudiants.AnyAsync(e => e.NumeroTelephone == request.NumeroTelephone, ct))
             throw new ConflictException($"Le numéro de téléphone '{request.NumeroTelephone}' est déjà enregistré.");
 
         var matricule = await _matriculeGenerator.GenererAsync(true, ct);
@@ -26,7 +26,7 @@ public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _ma
         // Création de l'entité étudiant via Mapster
         var etudiant = request.Adapt<EtudiantEntity>();
         etudiant.Matricule = matricule;
-        etudiant.NumeroTelphone = request.NumeroTelephone;
+        etudiant.NumeroTelephone = request.NumeroTelephone;
         etudiant.EtudiantParents = [];
 
         // Traitement des parents

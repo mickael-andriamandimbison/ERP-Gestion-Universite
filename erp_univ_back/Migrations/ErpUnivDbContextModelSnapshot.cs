@@ -175,7 +175,7 @@ namespace erp_univ_back.Migrations
                         .HasMaxLength(17)
                         .HasColumnType("character varying(17)");
 
-                    b.Property<string>("NumeroTelphone")
+                    b.Property<string>("NumeroTelephone")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
@@ -192,7 +192,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "NumeroCin")
                         .IsUnique();
 
-                    b.HasIndex("EtablissementId", "NumeroTelphone")
+                    b.HasIndex("EtablissementId", "NumeroTelephone")
                         .IsUnique();
 
                     b.ToTable("etudiants");

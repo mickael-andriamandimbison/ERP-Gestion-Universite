@@ -37,7 +37,7 @@ public class InscriptionMapping : IRegister
             .Map(dest => dest.Nom, src => src.Etudiant.Nom)
             .Map(dest => dest.Prenom, src => src.Etudiant.Prenom)
             .Map(dest => dest.Email, src => src.Etudiant.Email)
-            .Map(dest => dest.NumeroTelephone, src => src.Etudiant.NumeroTelphone)
+            .Map(dest => dest.NumeroTelephone, src => src.Etudiant.NumeroTelephone)
             .Map(dest => dest.Statut, src => src.Statut)
             .Map(dest => dest.DateInscription, src => src.DateCreation);
 
@@ -48,7 +48,7 @@ public class InscriptionMapping : IRegister
             .Map(dest => dest.Nom, src => src.Etudiant.Nom)
             .Map(dest => dest.Prenom, src => src.Etudiant.Prenom)
             .Map(dest => dest.Email, src => src.Etudiant.Email)
-            .Map(dest => dest.NumeroTelephone, src => src.Etudiant.NumeroTelphone)
+            .Map(dest => dest.NumeroTelephone, src => src.Etudiant.NumeroTelephone)
             .Map(dest => dest.Statut, src => src.Statut)
             .Map(dest => dest.DateInscription, src => src.DateCreation);
 

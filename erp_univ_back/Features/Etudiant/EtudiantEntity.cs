@@ -47,7 +47,7 @@ namespace erp_univ_back.Features.Etudiant
 
         [Required]
         [MaxLength(20)]
-        public required string NumeroTelphone { get; set; }
+        public required string NumeroTelephone { get; set; }
 
         [Required]
         [EmailAddress]
