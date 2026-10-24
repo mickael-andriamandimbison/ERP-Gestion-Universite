@@ -1,6 +1,7 @@
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
 using erp_univ_back.Shared.Utils;
+using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,38 +12,33 @@ public interface ICreateEtudiantService
     Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request, CancellationToken ct = default);
 }
 
-public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _matriculeGenerator) : ICreateEtudiantService
+public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _matriculeGenerator,IValidator<CreateEtudiantRequest> _validator) : ICreateEtudiantService
 {
     public async Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request, CancellationToken ct = default)
     {
-        if (await _db.Etudiants.AnyAsync(e => e.Email == request.Email, ct))
-            throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée par un autre étudiant.");
 
-        if (await _db.Etudiants.AnyAsync(e => e.NumeroTelephone == request.NumeroTelephone, ct))
-            throw new ConflictException($"Le numéro de téléphone '{request.NumeroTelephone}' est déjà enregistré.");
-
+        var validationResult = await _validator.ValidateAsync(request, ct);
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException(validationResult.Errors.First().ErrorMessage);
+        }
         var matricule = await _matriculeGenerator.GenererAsync(true, ct);
 
-        // Création de l'entité étudiant via Mapster
         var etudiant = request.Adapt<EtudiantEntity>();
         etudiant.Matricule = matricule;
         etudiant.NumeroTelephone = request.NumeroTelephone;
         etudiant.EtudiantParents = [];
 
-        // Traitement des parents
         foreach (var parentDto in request.Parents)
         {
-            // Chercher un parent existant 
             var parent = await _db.Parents.FirstOrDefaultAsync(p => p.NumeroTelphone == parentDto.NumeroTelephone, ct);
 
             if (parent is null)
             {
-                //créer un nouveau
                 parent = parentDto.Adapt<ParentEntity>();
                 parent.NumeroTelphone = parentDto.NumeroTelephone;
             }
 
-            // Créer le lien EtudiantParent
             var lien = new EtudiantParentEntity
             {
                 Role = parentDto.Role,
