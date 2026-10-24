@@ -1,29 +1,19 @@
 namespace erp_univ_back.Features.FiliereNiveau.Create;
 
-using erp_univ_back.Shared.Exceptions;
+using FluentValidation;
 
-public static class CreateFiliereNiveauValidator
+public class CreateFiliereNiveauValidator : AbstractValidator<CreateFiliereNiveauRequest>
 {
-    public static void Valider(CreateFiliereNiveauRequest request)
+    public CreateFiliereNiveauValidator()
     {
-        if (request is null)
-        {
-            throw new BadRequestException("Les données de l'association filière-niveau sont obligatoires.");
-        }
+        RuleFor(x => x.FiliereId)
+            .NotEmpty().WithMessage("L'identifiant de la filière est obligatoire.");
 
-        if (request.FiliereId == Guid.Empty)
-        {
-            throw new BadRequestException("L'identifiant de la filière est obligatoire.");
-        }
+        RuleFor(x => x.NiveauId)
+            .NotEmpty().WithMessage("L'identifiant du niveau est obligatoire.");
 
-        if (request.NiveauId == Guid.Empty)
-        {
-            throw new BadRequestException("L'identifiant du niveau est obligatoire.");
-        }
-
-        if (!string.IsNullOrWhiteSpace(request.LibelleAffiche) && request.LibelleAffiche.Trim().Length > 150)
-        {
-            throw new BadRequestException("Le libellé affiché ne doit pas dépasser 150 caractères.");
-        }
+        RuleFor(x => x.LibelleAffiche)
+            .MaximumLength(150).WithMessage("Le libellé affiché ne doit pas dépasser 150 caractères.")
+            .When(x => !string.IsNullOrWhiteSpace(x.LibelleAffiche));
     }
 }

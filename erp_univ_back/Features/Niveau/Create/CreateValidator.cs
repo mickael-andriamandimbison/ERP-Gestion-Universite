@@ -1,27 +1,20 @@
-using erp_univ_back.Shared.Exceptions;
-namespace erp_univ_back.Features.Niveau.Create
+namespace erp_univ_back.Features.Niveau.Create;
+
+using FluentValidation;
+
+public class CreateNiveauValidator : AbstractValidator<CreateNiveauRequest>
 {
-    public static class CreateNiveauValidator
+    public CreateNiveauValidator()
     {
-        public static void Valider(CreateNiveauRequest request)
-        {
-            if (request is null)
-                throw new BadHttpRequestException("Les données du niveau sont obligatoires.");
+        RuleFor(x => x.Code)
+            .NotEmpty().WithMessage("Le code du niveau est obligatoire.")
+            .MaximumLength(20).WithMessage("Le code ne doit pas dépasser 20 caractères.");
 
-            if (string.IsNullOrWhiteSpace(request.Code))
-                throw new BadRequestException("Le code du niveau est obligatoire.");
+        RuleFor(x => x.Nom)
+            .NotEmpty().WithMessage("Le nom du niveau est obligatoire.")
+            .MaximumLength(100).WithMessage("Le nom ne doit pas dépasser 100 caractères.");
 
-            if (request.Code.Trim().Length > 20)
-                throw new BadRequestException("Le code ne doit pas dépasser 20 caractères.");
-
-            if (string.IsNullOrWhiteSpace(request.Nom))
-                throw new BadRequestException("Le nom du niveau est obligatoire.");
-
-            if (request.Nom.Trim().Length > 100)
-                throw new BadRequestException("Le nom ne doit pas dépasser 100 caractères.");
-
-            if (request.Ordre <= 0)
-                throw new BadRequestException("L'ordre d'affichage doit être un entier supérieur à 0.");
-        }
+        RuleFor(x => x.Ordre)
+            .GreaterThan(0).WithMessage("L'ordre d'affichage doit être un entier supérieur à 0.");
     }
 }
