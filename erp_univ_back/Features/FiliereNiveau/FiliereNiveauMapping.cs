@@ -1,6 +1,7 @@
 namespace erp_univ_back.Features.FiliereNiveau;
 
 using erp_univ_back.Features.FiliereNiveau.Create;
+using erp_univ_back.Features.FiliereNiveau.GetAll;
 using erp_univ_back.Features.FiliereNiveau.GetByFiliere;
 using Mapster;
 
@@ -16,12 +17,8 @@ public class FiliereNiveauMapping : IRegister
             .Map(dest => dest.Ordre, src => src.Niveau.Ordre)
             .Map(dest => dest.LibelleAffiche, src => src.LibelleAffiche ?? "");
 
-        config.NewConfig<FiliereNiveauEntity, FiliereNiveauResponse>()
+        config.NewConfig<FiliereNiveauEntity, FiliereNiveauDto>()
             .Map(dest => dest.Id, src => src.Id)
-            .Map(dest => dest.NiveauId, src => src.NiveauId)
-            .Map(dest => dest.NiveauCode, src => src.Niveau.Code)
-            .Map(dest => dest.NiveauNom, src => src.Niveau.Nom)
-            .Map(dest => dest.Ordre, src => src.Niveau.Ordre)
             .Map(dest => dest.LibelleAffiche, src => src.LibelleAffiche ?? "");
 
         config.NewConfig<FiliereNiveauEntity, CreateFiliereNiveauResponse>()

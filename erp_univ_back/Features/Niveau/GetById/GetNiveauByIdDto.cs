@@ -8,12 +8,3 @@ public record GetNiveauByIdResponse(
     DateTime DateCreation,
     DateTime DateModification
 );
-
-public record NiveauDetailResponse(
-    Guid Id,
-    string Code,
-    string Nom,
-    int Ordre,
-    DateTime DateCreation,
-    DateTime DateModification
-) : GetNiveauByIdResponse(Id, Code, Nom, Ordre, DateCreation, DateModification);

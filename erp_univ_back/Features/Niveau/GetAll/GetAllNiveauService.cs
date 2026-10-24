@@ -9,11 +9,7 @@ public interface IGetAllNiveauService
     Task<List<GetAllNiveauResponse>> ExecuteAsync(CancellationToken ct = default);
 }
 
-public interface IGetAllNiveauxService : IGetAllNiveauService
-{
-}
-
-public class GetAllNiveauService(ErpUnivDbContext db) : IGetAllNiveauService, IGetAllNiveauxService
+public class GetAllNiveauService(ErpUnivDbContext db) : IGetAllNiveauService
 {
     public async Task<List<GetAllNiveauResponse>> ExecuteAsync(CancellationToken ct = default)
     {

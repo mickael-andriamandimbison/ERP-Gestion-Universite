@@ -1,16 +1,16 @@
 namespace erp_univ_back.Features.Inscription;
 
 using erp_univ_back.Features.Inscription.ChangeStatut;
-using erp_univ_back.Features.Inscription.Create;
 using erp_univ_back.Features.Inscription.GetByClasse;
 using erp_univ_back.Features.Inscription.GetByEtudiant;
+using erp_univ_back.Features.Inscription.Reinscription;
 using Mapster;
 
 public class InscriptionMapping : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<CreateInscriptionRequest, InscriptionEntity>()
+        config.NewConfig<ReinscriptionRequest, InscriptionEntity>()
             .Ignore(dest => dest.Id)
             .Ignore(dest => dest.DateCreation)
             .Ignore(dest => dest.DateModification)
@@ -21,7 +21,7 @@ public class InscriptionMapping : IRegister
             .Ignore(dest => dest.AnneeAcademique)
             .Map(dest => dest.Statut, _ => StatutInscription.Inscrit);
 
-        config.NewConfig<InscriptionEntity, CreateInscriptionResponse>()
+        config.NewConfig<InscriptionEntity, ReinscriptionResponse>()
             .Map(dest => dest.EtudiantNom, src => src.Etudiant.Nom)
             .Map(dest => dest.EtudiantPrenom, src => src.Etudiant.Prenom ?? "")
             .Map(dest => dest.EtudiantMatricule, src => src.Etudiant.Matricule)

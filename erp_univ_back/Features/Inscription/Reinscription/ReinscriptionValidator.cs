@@ -1,10 +1,10 @@
-namespace erp_univ_back.Features.Inscription.Create;
+namespace erp_univ_back.Features.Inscription.Reinscription;
 
 using FluentValidation;
 
-public class CreateInscriptionValidator : AbstractValidator<CreateInscriptionRequest>
+public class ReinscriptionValidator : AbstractValidator<ReinscriptionRequest>
 {
-    public CreateInscriptionValidator()
+    public ReinscriptionValidator()
     {
         RuleFor(x => x.EtudiantId)
             .NotEmpty()
@@ -19,3 +19,4 @@ public class CreateInscriptionValidator : AbstractValidator<CreateInscriptionReq
             .WithMessage("L'identifiant de l'année académique est obligatoire.");
     }
 }
+

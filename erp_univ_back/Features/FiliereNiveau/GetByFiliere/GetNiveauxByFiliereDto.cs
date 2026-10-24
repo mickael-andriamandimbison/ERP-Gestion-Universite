@@ -8,12 +8,3 @@ public record GetNiveauxByFiliereResponse(
     int Ordre,
     string LibelleAffiche
 );
-
-public record FiliereNiveauResponse(
-    Guid Id,
-    Guid NiveauId,
-    string NiveauCode,
-    string NiveauNom,
-    int Ordre,
-    string LibelleAffiche
-) : GetNiveauxByFiliereResponse(Id, NiveauId, NiveauCode, NiveauNom, Ordre, LibelleAffiche);

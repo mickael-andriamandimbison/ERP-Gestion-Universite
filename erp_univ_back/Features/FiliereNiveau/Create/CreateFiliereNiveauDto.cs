@@ -2,8 +2,7 @@ namespace erp_univ_back.Features.FiliereNiveau.Create;
 
 public record CreateFiliereNiveauRequest(
     Guid FiliereId,
-    Guid NiveauId,
-    string? LibelleAffiche
+    Guid NiveauId
 );
 
 public record CreateFiliereNiveauResponse(

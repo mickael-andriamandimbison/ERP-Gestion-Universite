@@ -1,4 +1,4 @@
-namespace erp_univ_back.Features.Inscription.Create;
+namespace erp_univ_back.Features.Inscription.Reinscription;
 
 using erp_univ_back.Features.Inscription;
 using erp_univ_back.Shared.Data;
@@ -7,16 +7,20 @@ using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-public interface ICreateInscriptionService
+public interface IReinscriptionService
 {
-    Task<CreateInscriptionResponse> ExecuteAsync(CreateInscriptionRequest request, CancellationToken ct = default);
+    Task<ReinscriptionResponse> ExecuteAsync(ReinscriptionRequest request, CancellationToken ct = default);
 }
 
-public class CreateInscriptionService(
-    ErpUnivDbContext db,
-    IValidator<CreateInscriptionRequest> validator) : ICreateInscriptionService
+public interface IReinscriptionInscriptionService : IReinscriptionService
 {
-    public async Task<CreateInscriptionResponse> ExecuteAsync(CreateInscriptionRequest request, CancellationToken ct = default)
+}
+
+public class ReinscriptionService(
+    ErpUnivDbContext db,
+    IValidator<ReinscriptionRequest> validator) : IReinscriptionService, IReinscriptionInscriptionService
+{
+    public async Task<ReinscriptionResponse> ExecuteAsync(ReinscriptionRequest request, CancellationToken ct = default)
     {
         var validationResult = await validator.ValidateAsync(request, ct);
         if (!validationResult.IsValid)
@@ -48,7 +52,7 @@ public class CreateInscriptionService(
 
         if (!annee.EstActive)
         {
-            throw new BadRequestException($"L'année académique '{annee.Libelle}' n'est pas active. Les inscriptions ne sont possibles que sur une année académique active.");
+            throw new BadRequestException($"L'année académique '{annee.Libelle}' n'est pas active. Les réinscriptions ne sont possibles que sur une année académique active.");
         }
 
         var dejaInscrit = await db.Inscriptions.AnyAsync(
@@ -72,6 +76,6 @@ public class CreateInscriptionService(
         inscription.FiliereNiveau = classe;
         inscription.AnneeAcademique = annee;
 
-        return inscription.Adapt<CreateInscriptionResponse>();
+        return inscription.Adapt<ReinscriptionResponse>();
     }
 }

@@ -12,10 +12,3 @@ public record UpdateNiveauResponse(
     string Nom,
     int Ordre
 );
-
-public record NiveauResponse(
-    Guid Id,
-    string Code,
-    string Nom,
-    int Ordre
-) : UpdateNiveauResponse(Id, Code, Nom, Ordre);

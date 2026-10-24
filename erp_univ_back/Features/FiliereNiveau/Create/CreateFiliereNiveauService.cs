@@ -24,17 +24,11 @@ public class CreateFiliereNiveauService(
             throw new BadRequestException(validationResult.Errors.First().ErrorMessage);
         }
 
-        var filiere = await db.Filieres.FirstOrDefaultAsync(f => f.Id == request.FiliereId, ct);
-        if (filiere is null)
-        {
-            throw new NotFoundException($"La filière avec l'identifiant '{request.FiliereId}' n'existe pas.");
-        }
+        var filiere = await db.Filieres.FirstOrDefaultAsync(f => f.Id == request.FiliereId, ct)
+            ?? throw new NotFoundException($"La filière avec l'identifiant '{request.FiliereId}' n'existe pas.");
 
-        var niveau = await db.Niveaux.FirstOrDefaultAsync(n => n.Id == request.NiveauId, ct);
-        if (niveau is null)
-        {
-            throw new NotFoundException($"Le niveau avec l'identifiant '{request.NiveauId}' n'existe pas.");
-        }
+        var niveau = await db.Niveaux.FirstOrDefaultAsync(n => n.Id == request.NiveauId, ct)
+            ?? throw new NotFoundException($"Le niveau avec l'identifiant '{request.NiveauId}' n'existe pas.");
 
         var existe = await db.FiliereNiveaux.AnyAsync(
             fn => fn.FiliereId == request.FiliereId && fn.NiveauId == request.NiveauId,
@@ -45,15 +39,12 @@ public class CreateFiliereNiveauService(
             throw new ConflictException($"L'association entre la filière '{filiere.Nom}' et le niveau '{niveau.Nom}' existe déjà.");
         }
 
-        var libelleFinal = string.IsNullOrWhiteSpace(request.LibelleAffiche)
-            ? $"{niveau.Nom} {filiere.Nom}"
-            : request.LibelleAffiche.Trim();
-
+        
         var entity = new FiliereNiveauEntity
         {
             FiliereId = request.FiliereId,
             NiveauId = request.NiveauId,
-            LibelleAffiche = libelleFinal
+            LibelleAffiche = $"{filiere.Nom}-{niveau.Code}"
         };
 
         db.FiliereNiveaux.Add(entity);
