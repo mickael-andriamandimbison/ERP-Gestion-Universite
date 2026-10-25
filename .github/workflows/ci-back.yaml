@@ -1,0 +1,51 @@
+name: Backend CI (.NET)
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'erp_univ_back/**'
+      - 'erp_univ_back.Tests/**'
+      - '.github/workflows/ci-backend.yml'
+  
+  # Essentiel : Lance les tests quand quelqu'un fait une PR vers develop ou main
+  pull_request:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'erp_univ_back/**'
+      - 'erp_univ_back.Tests/**'
+      - '.github/workflows/ci-backend.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout du code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    # 2. LE CACHE
+    - name: Cache des paquets NuGet
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        # Si un fichier .csproj change, le cache se met à jour. Sinon, il réutilise l'ancien.
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restauration
+      run: dotnet restore erp_univ_back.Tests/erp_univ_back.Tests.csproj
+
+    - name: Compilation
+      run: dotnet build erp_univ_back.Tests/erp_univ_back.Tests.csproj --no-restore
+
+    # 3. LES TESTS AVEC RAPPORT
+    - name: Exécution des tests
+      # L'ajout du logger crée un fichier de rapport officiel que GitHub peut lire
+      run: dotnet test erp_univ_back.Tests/erp_univ_back.Tests.csproj --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
