@@ -13,11 +13,8 @@ public class DeleteEtablissementService(ErpUnivDbContext db) : IDeleteEtablissem
 {
     public async Task ExecuteAsync(Guid id, CancellationToken ct = default)
     {
-        var etablissement = await db.Etablissements.FirstOrDefaultAsync(x => x.Id == id, ct);
-        if (etablissement is null)
-        {
-            throw new NotFoundException("Etablissement non trouvé");
-        }
+        var etablissement = await db.Etablissements.FirstOrDefaultAsync(x => x.Id == id, ct) ?? throw new NotFoundException("Etablissement non trouvé");
+
         db.Etablissements.Remove(etablissement);
         await db.SaveChangesAsync(ct);
     }

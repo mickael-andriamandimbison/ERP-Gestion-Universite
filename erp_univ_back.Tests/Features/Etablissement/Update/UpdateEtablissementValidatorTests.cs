@@ -1,26 +1,26 @@
-using Xunit;
+using erp_univ_back.Features.Etablissement;
+using erp_univ_back.Features.Etablissement.Update;
 using FluentValidation.TestHelper;
-using erp_univ_back.Features.Etablissement.Create;
-using erp_univ_back.Features.Etablissement; // Pour importer StatusEtablissement
+using Xunit;
 
-namespace erp_univ_back.Tests.Features.Etablissement.Create;
+namespace erp_univ_back.Tests.Features.Etablissement.Update;
 
-public class CreateEtablissementValidatorTests
+public class UpdateEtablissementValidatorTests
 {
-    private readonly CreateEtablissementValidator _validator = new();
+    private readonly UpdateEtablissementValidator _validator = new();
 
-    private CreateEtablissementRequest GetValidRequest() => new(
-        Nom: "Université d'Antananarivo",
+    private UpdateEtablissementRequest GetValidRequest() => new(
+        Nom: "Université d'Antananarivo Modifiée",
         Adresse: "Campus Universitaire Ambohitsaina",
         CodePostal: "101",
         Ville: "Antananarivo",
         Pays: "Madagascar",
-        Telephone: "+261340000000",
-        Email: "contact@univ-antananarivo.mg",
+        Telephone: "+261340000001",
+        Email: "update@univ-antananarivo.mg",
         SiteWeb: "https://www.univ-antananarivo.mg",
-        Logo: "logo_univ.png",
-        Sigle: "UA",
-        Description: "La plus grande université de Madagascar.",
+        Logo: "nouveau_logo.png",
+        Sigle: "UAM",
+        Description: "Description mise à jour.",
         Statut: StatusEtablissement.Actif
     );
 
@@ -111,7 +111,6 @@ public class CreateEtablissementValidatorTests
     public void Validator_DoitBloquer_QuandStatutInvalide()
     {
         var request = GetValidRequest() with { Statut = (StatusEtablissement)999 };
-
         var result = _validator.TestValidate(request);
         result.ShouldHaveValidationErrorFor(x => x.Statut);
     }
@@ -124,3 +123,4 @@ public class CreateEtablissementValidatorTests
         result.ShouldNotHaveAnyValidationErrors();
     }
 }
+
