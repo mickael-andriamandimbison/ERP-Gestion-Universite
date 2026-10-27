@@ -1,5 +1,6 @@
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
+using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,23 +11,16 @@ public interface ICreateFiliereService
     Task<CreateFiliereResponse> ExecuteAsync(CreateFiliereRequest request, CancellationToken ct = default);
 }
 
-public class CreateFiliereService(ErpUnivDbContext _db) : ICreateFiliereService
+public class CreateFiliereService(ErpUnivDbContext _db, IValidator<CreateFiliereRequest> _validator) : ICreateFiliereService
 {
     public async Task<CreateFiliereResponse> ExecuteAsync(CreateFiliereRequest request, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(request.Code))
-            throw new BadRequestException("Le code de la filière est obligatoire.");
-
-        if (string.IsNullOrWhiteSpace(request.Nom))
-            throw new BadRequestException("Le nom de la filière est obligatoire.");
+        var validationResult = await _validator.ValidateAsync(request, ct);
+        if (!validationResult.IsValid)
+            throw new BadRequestException(validationResult.Errors.First().ErrorMessage);
 
         var codeUpper = request.Code.Trim().ToUpperInvariant();
-        if (codeUpper.Length > 20)
-            throw new BadRequestException("Le code de la filière ne doit pas dépasser 20 caractères.");
-
         var nomTrimmed = request.Nom.Trim();
-        if (nomTrimmed.Length > 150)
-            throw new BadRequestException("Le nom de la filière ne doit pas dépasser 150 caractères.");
 
         if (await _db.Filieres.AnyAsync(f => f.Code == codeUpper, ct))
             throw new ConflictException($"Une filière avec le code '{codeUpper}' existe déjà.");

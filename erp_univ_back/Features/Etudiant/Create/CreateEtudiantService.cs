@@ -12,16 +12,22 @@ public interface ICreateEtudiantService
     Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request, CancellationToken ct = default);
 }
 
-public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _matriculeGenerator,IValidator<CreateEtudiantRequest> _validator) : ICreateEtudiantService
+public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _matriculeGenerator, IValidator<CreateEtudiantRequest> _validator) : ICreateEtudiantService
 {
     public async Task<CreateEtudiantResponse> ExecuteAsync(CreateEtudiantRequest request, CancellationToken ct = default)
     {
-
         var validationResult = await _validator.ValidateAsync(request, ct);
         if (!validationResult.IsValid)
         {
             throw new BadRequestException(validationResult.Errors.First().ErrorMessage);
         }
+
+        if (await _db.Etudiants.AnyAsync(e => e.NumeroTelephone == request.NumeroTelephone, ct))
+            throw new ConflictException($"Le numéro de téléphone '{request.NumeroTelephone}' est déjà enregistré.");
+
+        if (await _db.Etudiants.AnyAsync(e => e.Email == request.Email, ct))
+            throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée.");
+
         var matricule = await _matriculeGenerator.GenererAsync(true, ct);
 
         var etudiant = request.Adapt<EtudiantEntity>();

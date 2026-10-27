@@ -22,6 +22,9 @@ public class GetInscriptionsByEtudiantService(ErpUnivDbContext db) : IGetInscrip
 
         var historique = await db.Inscriptions
             .AsNoTracking()
+            .Include(i => i.FiliereNiveau).ThenInclude(fn => fn.Filiere)
+            .Include(i => i.FiliereNiveau).ThenInclude(fn => fn.Niveau)
+            .Include(i => i.AnneeAcademique)
             .Where(i => i.EtudiantId == etudiantId)
             .OrderByDescending(i => i.AnneeAcademique.DateDebut)
             .ThenByDescending(i => i.DateCreation)

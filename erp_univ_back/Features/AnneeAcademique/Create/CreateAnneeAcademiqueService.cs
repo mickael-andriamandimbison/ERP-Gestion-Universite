@@ -2,6 +2,7 @@ namespace erp_univ_back.Features.AnneeAcademique.Create;
 
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
+using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +11,13 @@ public interface ICreateAnneeAcademiqueService
     Task<CreateAnneeAcademiqueResponse> ExecuteAsync(CreateAnneeAcademiqueRequest request, CancellationToken ct = default);
 }
 
-public class CreateAnneeAcademiqueService(ErpUnivDbContext _db) : ICreateAnneeAcademiqueService
+public class CreateAnneeAcademiqueService(ErpUnivDbContext _db, IValidator<CreateAnneeAcademiqueRequest> _validator) : ICreateAnneeAcademiqueService
 {
     public async Task<CreateAnneeAcademiqueResponse> ExecuteAsync(CreateAnneeAcademiqueRequest request, CancellationToken ct = default)
     {
-        AnneeAcademiqueValidator.Valider(request.Libelle, request.DateDebut, request.DateFin);
+        var verification = await _validator.ValidateAsync(request, ct);
+        if (!verification.IsValid)
+            throw new BadRequestException(verification.Errors.First().ErrorMessage);
 
         var trimmedLibelle = request.Libelle.Trim();
 

@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Xunit;
 
 namespace erp_univ_back.Tests.Features.Etablissement.Create;
 
@@ -25,7 +24,6 @@ public class CreateEtablissementIntegrationTests : IClassFixture<WebApplicationF
 
     public CreateEtablissementIntegrationTests(WebApplicationFactory<Program> factory)
     {
-        // Nom de base unique généré une seule fois par instance de test pour persister entre les requêtes HTTP du même test
         var dbName = "DbTest_Etablissement_Create_" + Guid.NewGuid().ToString();
 
         var application = factory.WithWebHostBuilder(builder =>

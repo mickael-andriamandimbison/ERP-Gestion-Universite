@@ -29,7 +29,7 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     {
         base.OnModelCreating(mb);
 
-        // --- 1. Établissement (Entité racine globale, jamais filtrée par tenant) ---
+        // --- 1. Établissement 
         mb.Entity<EtablissementEntity>(e =>
         {
             e.HasKey(x => x.Id);
@@ -244,7 +244,6 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
 
                 var hasEtablissementId = entry.Properties.Any(p => p.Metadata.Name == "EtablissementId");
 
-                // Injecte automatiquement l'EtablissementId courant ou lève 401 si manquant
                 if (hasEtablissementId)
                 {
                     entry.Property("EtablissementId").CurrentValue = _tenantService.ObtenirEtablissementId();

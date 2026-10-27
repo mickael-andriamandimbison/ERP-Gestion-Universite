@@ -1,6 +1,8 @@
 using erp_univ_back.Shared.Data;
+using erp_univ_back.Shared.Exceptions;
 using erp_univ_back.Shared.Responses;
 using erp_univ_back.Shared.Utils;
+using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,27 +13,48 @@ public interface IGetAllProfesseurService
     Task<PagedResponse<GetAllProfesseurResponse>> ExecuteAsync(GetAllProfesseurRequest request, CancellationToken ct = default);
 }
 
-public class GetAllProfesseurService(ErpUnivDbContext _db) : IGetAllProfesseurService
+public class GetAllProfesseurService(
+    ErpUnivDbContext _db,
+    IValidator<GetAllProfesseurRequest> _validator) : IGetAllProfesseurService
 {
     private const int TaillePageMax = 100;
 
     public async Task<PagedResponse<GetAllProfesseurResponse>> ExecuteAsync(GetAllProfesseurRequest request, CancellationToken ct = default)
     {
-        var page = request.Page < 1 ? 1 : request.Page;
-        var taillePage = request.TaillePage < 1 ? 10 : Math.Min(request.TaillePage, TaillePageMax);
+        var validationResult = await _validator.ValidateAsync(request, ct);
+        if (!validationResult.IsValid)
+            throw new BadRequestException(validationResult.Errors.First().ErrorMessage);
+
+        var page = request.Page;
+        var taillePage = Math.Min(request.TaillePage, TaillePageMax);
 
         var query = _db.Professeurs.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(request.Recherche))
         {
-            var motif = QueryHelper.VersMotifRecherche(request.Recherche);
-            query = query.Where(p =>
-                EF.Functions.ILike(p.Nom, motif) ||
-                (p.Prenom != null && EF.Functions.ILike(p.Prenom, motif)) ||
-                EF.Functions.ILike(p.Matricule, motif) ||
-                (p.Email != null && EF.Functions.ILike(p.Email, motif)) ||
-                EF.Functions.ILike(p.NumeroTelephone, motif) ||
-                EF.Functions.ILike(p.NumeroCin, motif));
+            var isInMemory = _db.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            if (isInMemory)
+            {
+                var r = request.Recherche.Trim();
+                query = query.Where(p =>
+                    p.Nom.Contains(r, StringComparison.OrdinalIgnoreCase) ||
+                    (p.Prenom != null && p.Prenom.Contains(r, StringComparison.OrdinalIgnoreCase)) ||
+                    p.Matricule.Contains(r, StringComparison.OrdinalIgnoreCase) ||
+                    (p.Email != null && p.Email.Contains(r, StringComparison.OrdinalIgnoreCase)) ||
+                    p.NumeroTelephone.Contains(r, StringComparison.OrdinalIgnoreCase) ||
+                    p.NumeroCin.Contains(r, StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                var motif = QueryHelper.VersMotifRecherche(request.Recherche);
+                query = query.Where(p =>
+                    EF.Functions.ILike(p.Nom, motif) ||
+                    (p.Prenom != null && EF.Functions.ILike(p.Prenom, motif)) ||
+                    EF.Functions.ILike(p.Matricule, motif) ||
+                    (p.Email != null && EF.Functions.ILike(p.Email, motif)) ||
+                    EF.Functions.ILike(p.NumeroTelephone, motif) ||
+                    EF.Functions.ILike(p.NumeroCin, motif));
+            }
         }
 
         query = (request.ChampTri?.ToLower(), request.TriDecroissant) switch

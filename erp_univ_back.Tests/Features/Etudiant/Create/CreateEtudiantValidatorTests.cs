@@ -1,6 +1,4 @@
-using Xunit;
 using FluentValidation.TestHelper;
-using System;
 using erp_univ_back.Features.Etudiant.Create;
 
 namespace erp_univ_back.Tests.Features.Etudiant.Create;
