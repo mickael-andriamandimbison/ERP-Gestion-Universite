@@ -56,7 +56,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "Libelle")
                         .IsUnique();
 
-                    b.ToTable("AnneeAcademiques");
+                    b.ToTable("AnneeAcademiques", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Etablissement.EtablissementEntity", b =>
@@ -131,7 +131,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("Nom")
                         .IsUnique();
 
-                    b.ToTable("etablissements");
+                    b.ToTable("etablissements", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantEntity", b =>
@@ -195,7 +195,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "NumeroTelephone")
                         .IsUnique();
 
-                    b.ToTable("etudiants");
+                    b.ToTable("etudiants", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.EtudiantParentEntity", b =>
@@ -228,7 +228,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtudiantId", "ParentId")
                         .IsUnique();
 
-                    b.ToTable("etudiant_parent");
+                    b.ToTable("etudiant_parent", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Etudiant.ParentEntity", b =>
@@ -273,7 +273,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "NumeroTelphone")
                         .IsUnique();
 
-                    b.ToTable("parents");
+                    b.ToTable("parents", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Filiere.FiliereEntity", b =>
@@ -309,7 +309,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "Code")
                         .IsUnique();
 
-                    b.ToTable("filieres");
+                    b.ToTable("filieres", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.FiliereNiveau.FiliereNiveauEntity", b =>
@@ -346,7 +346,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "FiliereId", "NiveauId")
                         .IsUnique();
 
-                    b.ToTable("filiere_niveaux");
+                    b.ToTable("filiere_niveaux", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Inscription.InscriptionEntity", b =>
@@ -389,7 +389,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "EtudiantId", "FiliereNiveauId", "AnneeAcademiqueId")
                         .IsUnique();
 
-                    b.ToTable("inscriptions");
+                    b.ToTable("inscriptions", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Niveau.NiveauEntity", b =>
@@ -425,7 +425,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "Code")
                         .IsUnique();
 
-                    b.ToTable("niveaux");
+                    b.ToTable("niveaux", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.Professeur.ProfesseurEntity", b =>
@@ -489,7 +489,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "NumeroTelephone")
                         .IsUnique();
 
-                    b.ToTable("professeurs");
+                    b.ToTable("professeurs", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.UniteEnseignement.UniteEnseignementEntity", b =>
@@ -533,7 +533,7 @@ namespace erp_univ_back.Migrations
                     b.HasIndex("EtablissementId", "Code")
                         .IsUnique();
 
-                    b.ToTable("unites_enseignement");
+                    b.ToTable("unites_enseignement", (string)null);
                 });
 
             modelBuilder.Entity("erp_univ_back.Features.AnneeAcademique.AnneeAcademiqueEntity", b =>

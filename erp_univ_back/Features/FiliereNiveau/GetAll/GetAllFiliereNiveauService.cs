@@ -17,7 +17,7 @@ public class GetAllFiliereNiveauService(ErpUnivDbContext db) : IGetAllFiliereNiv
             .OrderBy(fn => fn.LibelleAffiche)
             .Select(fn => new FiliereNiveauDto(
                 fn.Id,
-                fn.LibelleAffiche ?? string.Empty
+                (fn.LibelleAffiche ?? string.Empty).Replace(" - ", "-")
             ))
             .ToListAsync(ct);
     }

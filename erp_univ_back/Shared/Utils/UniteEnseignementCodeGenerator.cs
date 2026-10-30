@@ -1,4 +1,4 @@
-namespace erp_univ_back.Features.UniteEnseignement.Utils;
+namespace erp_univ_back.Shared.Utils;
 
 using erp_univ_back.Shared.Data;
 using Microsoft.EntityFrameworkCore;
@@ -26,21 +26,13 @@ public class UniteEnseignementCodeGenerator(ErpUnivDbContext _db) : IUniteEnseig
 
         var baseCode = FormaterBase(filiereNiveau.Filiere.Code, filiereNiveau.Niveau.Code);
 
-        // Si le code de base n'existe pas encore dans cet établissement, on l'utilise directement (ex: UE-INF-L1)
-        var existeDeja = await _db.UniteEnseignements.AnyAsync(u => u.Code == baseCode, ct);
-        if (!existeDeja)
-        {
-            return baseCode;
-        }
-
-        // Sinon, on incrémente un suffixe numérique pour garantir l'unicité (ex: UE-INF-L1-2, UE-INF-L1-3, ...)
-        var compteur = 2;
-        while (await _db.UniteEnseignements.AnyAsync(u => u.Code == $"{baseCode}-{compteur}", ct))
+        // Numérotation dès le début sur au moins deux chiffres : 01, 02, etc.
+        var compteur = 1;
+        while (await _db.UniteEnseignements.AnyAsync(u => u.Code == $"{baseCode}-{compteur:D2}", ct))
         {
             compteur++;
         }
 
-        return $"{baseCode}-{compteur}";
+        return $"{baseCode}-{compteur:D2}";
     }
 }
-

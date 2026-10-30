@@ -44,7 +44,7 @@ public class CreateFiliereNiveauService(
         {
             FiliereId = request.FiliereId,
             NiveauId = request.NiveauId,
-            LibelleAffiche = $"{filiere.Nom}-{niveau.Code}"
+            LibelleAffiche = $"{filiere.Code.Trim()}-{niveau.Code.Trim()}"
         };
 
         db.FiliereNiveaux.Add(entity);

@@ -122,7 +122,7 @@ public class CreateFiliereNiveauIntegrationTests : IClassFixture<WebApplicationF
         created.FiliereNom.Should().Be("Genie Logiciel");
         created.NiveauId.Should().Be(niveau.Id);
         created.NiveauNom.Should().Be("Licence 3");
-        created.LibelleAffiche.Should().Be("Genie Logiciel-L3");
+        created.LibelleAffiche.Should().Be("GL-L3");
     }
 
     [Fact]

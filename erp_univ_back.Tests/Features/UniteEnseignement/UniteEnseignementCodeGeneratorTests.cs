@@ -5,9 +5,9 @@ using erp_univ_back.Features.Filiere;
 using erp_univ_back.Features.FiliereNiveau;
 using erp_univ_back.Features.Niveau;
 using erp_univ_back.Features.UniteEnseignement;
-using erp_univ_back.Features.UniteEnseignement.Utils;
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Services;
+using erp_univ_back.Shared.Utils;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -39,7 +39,7 @@ public class UniteEnseignementCodeGeneratorTests
     }
 
     [Fact]
-    public async Task GenererAsync_DoitGenererCodeDeBase_QuandAucuneUeExiste()
+    public async Task GenererAsync_DoitGenererCodeAvecSuffixe01_QuandAucuneUeExiste()
     {
         // Arrange
         var filiere = new FiliereEntity { Id = Guid.NewGuid(), Code = "INF", Nom = "Informatique", EtablissementId = _etablissementId };
@@ -63,11 +63,11 @@ public class UniteEnseignementCodeGeneratorTests
         var result = await _generator.GenererAsync(filiereNiveau.Id);
 
         // Assert
-        result.Should().Be("UE-INF-L1");
+        result.Should().Be("UE-INF-L1-01");
     }
 
     [Fact]
-    public async Task GenererAsync_DoitIncrementerSuffixe_QuandCodeExisteDeja()
+    public async Task GenererAsync_DoitIncrementerSuffixeA02_Quand01ExisteDeja()
     {
         // Arrange
         var filiere = new FiliereEntity { Id = Guid.NewGuid(), Code = "INF", Nom = "Informatique", EtablissementId = _etablissementId };
@@ -86,11 +86,11 @@ public class UniteEnseignementCodeGeneratorTests
         _db.Niveaux.Add(niveau);
         _db.FiliereNiveaux.Add(filiereNiveau);
 
-        // Première UE existante avec le code de base
+        // Première UE existante avec le code 01
         _db.UniteEnseignements.Add(new UniteEnseignementEntity
         {
             Id = Guid.NewGuid(),
-            Code = "UE-INF-L1",
+            Code = "UE-INF-L1-01",
             Nom = "Algorithmique 1",
             Credit = 5,
             Semestre = 1,
@@ -103,7 +103,7 @@ public class UniteEnseignementCodeGeneratorTests
         var result = await _generator.GenererAsync(filiereNiveau.Id);
 
         // Assert
-        result.Should().Be("UE-INF-L1-2");
+        result.Should().Be("UE-INF-L1-02");
     }
 
     [Fact]
