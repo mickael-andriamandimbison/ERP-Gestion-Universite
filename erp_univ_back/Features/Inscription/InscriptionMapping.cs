@@ -3,6 +3,7 @@ namespace erp_univ_back.Features.Inscription;
 using erp_univ_back.Features.Inscription.ChangeStatut;
 using erp_univ_back.Features.Inscription.GetByClasse;
 using erp_univ_back.Features.Inscription.GetByEtudiant;
+using erp_univ_back.Features.Inscription.Register;
 using erp_univ_back.Features.Inscription.Reinscription;
 using Mapster;
 
@@ -29,6 +30,21 @@ public class InscriptionMapping : IRegister
                 ? src.FiliereNiveau.LibelleAffiche
                 : $"{src.FiliereNiveau.Niveau.Nom} {src.FiliereNiveau.Filiere.Nom}")
             .Map(dest => dest.AnneeAcademiqueLibelle, src => src.AnneeAcademique.Libelle);
+
+        config.NewConfig<InscriptionEntity, RegisterInscriptionResponse>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.EtudiantId, src => src.EtudiantId)
+            .Map(dest => dest.EtudiantNom, src => src.Etudiant.Nom)
+            .Map(dest => dest.EtudiantPrenom, src => src.Etudiant.Prenom ?? "")
+            .Map(dest => dest.EtudiantMatricule, src => src.Etudiant.Matricule)
+            .Map(dest => dest.FiliereNiveauId, src => src.FiliereNiveauId)
+            .Map(dest => dest.ClasseLibelle, src => !string.IsNullOrWhiteSpace(src.FiliereNiveau.LibelleAffiche)
+                ? src.FiliereNiveau.LibelleAffiche
+                : $"{src.FiliereNiveau.Niveau.Nom} {src.FiliereNiveau.Filiere.Nom}")
+            .Map(dest => dest.AnneeAcademiqueId, src => src.AnneeAcademiqueId)
+            .Map(dest => dest.AnneeAcademiqueLibelle, src => src.AnneeAcademique.Libelle)
+            .Map(dest => dest.Statut, src => src.Statut)
+            .Map(dest => dest.DateCreation, src => src.DateCreation);
 
         config.NewConfig<InscriptionEntity, GetInscriptionsByClasseResponse>()
             .Map(dest => dest.Id, src => src.Id)

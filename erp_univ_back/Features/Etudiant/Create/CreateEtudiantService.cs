@@ -28,11 +28,16 @@ public class CreateEtudiantService(ErpUnivDbContext _db, IMatriculeGenerator _ma
         if (await _db.Etudiants.AnyAsync(e => e.Email == request.Email, ct))
             throw new ConflictException($"L'adresse email '{request.Email}' est déjà utilisée.");
 
+        if (!string.IsNullOrWhiteSpace(request.NumeroCin) &&
+            await _db.Etudiants.AnyAsync(e => e.NumeroCin == request.NumeroCin, ct))
+        {
+            throw new ConflictException($"Le numéro CIN '{request.NumeroCin}' est déjà utilisé.");
+        }
+
         var matricule = await _matriculeGenerator.GenererAsync(true, ct);
 
         var etudiant = request.Adapt<EtudiantEntity>();
         etudiant.Matricule = matricule;
-        etudiant.NumeroTelephone = request.NumeroTelephone;
         etudiant.EtudiantParents = [];
 
         foreach (var parentDto in request.Parents)

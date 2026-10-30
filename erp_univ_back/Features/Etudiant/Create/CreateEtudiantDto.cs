@@ -7,6 +7,7 @@ public record CreateEtudiantRequest(
     string LieuNaissance,
     string NumeroTelephone,
     string Email,
+    string? NumeroCin = null,
     List<CreateParentDto>? Parents = null
 )
 {

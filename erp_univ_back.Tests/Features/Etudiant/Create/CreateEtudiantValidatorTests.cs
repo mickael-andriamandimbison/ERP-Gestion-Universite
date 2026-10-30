@@ -1,5 +1,6 @@
 using FluentValidation.TestHelper;
 using erp_univ_back.Features.Etudiant.Create;
+using Xunit;
 
 namespace erp_univ_back.Tests.Features.Etudiant.Create;
 
@@ -14,6 +15,7 @@ public class CreateEtudiantRequestValidatorTests
         LieuNaissance: "Antananarivo",
         NumeroTelephone: "+261341234567",
         Email: "jean.rakoto@univ.mg",
+        NumeroCin: "101234567890",
         Parents: null
     );
 
@@ -86,6 +88,52 @@ public class CreateEtudiantRequestValidatorTests
         var request = GetValidRequest() with { Email = fauxEmail };
         var result = _validator.TestValidate(request);
         result.ShouldHaveValidationErrorFor(x => x.Email);
+    }
+
+    [Theory]
+    [InlineData("12345")] // Trop court (5 chiffres)
+    [InlineData("10123456789")] // 11 chiffres
+    [InlineData("1012345678901")] // 13 chiffres
+    [InlineData("10123456789012345")] // 17 chiffres
+    public void Validator_DoitBloquer_QuandCinLongueurDifferenteDe12(string fauxCin)
+    {
+        var request = GetValidRequest() with { NumeroCin = fauxCin };
+        var result = _validator.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(x => x.NumeroCin);
+    }
+
+    [Theory]
+    [InlineData("10123456789A")]
+    [InlineData("101-234-5678")]
+    [InlineData("CIN123456789")]
+    [InlineData("            ")]
+    public void Validator_DoitBloquer_QuandCinContientCaracteresNonNumeriques(string fauxCin)
+    {
+        var request = GetValidRequest() with { NumeroCin = fauxCin };
+        var result = _validator.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(x => x.NumeroCin);
+    }
+
+    [Theory]
+    [InlineData("101234567890")]
+    [InlineData("201999888777")]
+    public void Validator_DoitAccepter_QuandCinEstValide(string vraiCin)
+    {
+        var request = GetValidRequest() with { NumeroCin = vraiCin };
+        var result = _validator.TestValidate(request);
+        result.ShouldNotHaveValidationErrorFor(x => x.NumeroCin);
+    }
+
+    [Fact]
+    public void Validator_DoitAccepter_QuandCinEstNullOuVide()
+    {
+        var requestNull = GetValidRequest() with { NumeroCin = null };
+        var resultNull = _validator.TestValidate(requestNull);
+        resultNull.ShouldNotHaveValidationErrorFor(x => x.NumeroCin);
+
+        var requestVide = GetValidRequest() with { NumeroCin = "" };
+        var resultVide = _validator.TestValidate(requestVide);
+        resultVide.ShouldNotHaveValidationErrorFor(x => x.NumeroCin);
     }
 
     [Fact]

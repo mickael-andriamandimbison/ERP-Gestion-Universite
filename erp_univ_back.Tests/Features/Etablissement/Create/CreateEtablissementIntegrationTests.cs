@@ -30,7 +30,6 @@ public class CreateEtablissementIntegrationTests : IClassFixture<WebApplicationF
         {
             builder.ConfigureServices(services =>
             {
-                // 1. Nettoyage strict EF Core (PostgreSQL -> InMemory)
                 services.RemoveAll(typeof(DbContextOptions<ErpUnivDbContext>));
                 services.RemoveAll(typeof(DbContextOptions));
                 services.RemoveAll(typeof(IDbContextOptionsConfiguration<ErpUnivDbContext>));
