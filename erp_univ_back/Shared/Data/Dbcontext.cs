@@ -10,6 +10,7 @@ using erp_univ_back.Features.Filiere;
 using erp_univ_back.Features.Niveau;
 using erp_univ_back.Features.FiliereNiveau;
 using erp_univ_back.Features.Inscription;
+using erp_univ_back.Features.UniteEnseignement;
 using erp_univ_back.Shared.Entities;
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
@@ -24,6 +25,7 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     public DbSet<NiveauEntity> Niveaux { get; set; } = null!;
     public DbSet<FiliereNiveauEntity> FiliereNiveaux { get; set; } = null!;
     public DbSet<InscriptionEntity> Inscriptions { get; set; } = null!;
+    public DbSet<UniteEnseignementEntity> UniteEnseignements { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
@@ -225,6 +227,30 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
 
             e.HasOne(x => x.Etablissement)
                 .WithMany(x => x.Inscriptions)
+                .HasForeignKey(x => x.EtablissementId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // --- 11. Unité d'Enseignement ---
+        mb.Entity<UniteEnseignementEntity>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasQueryFilter(x => x.EtablissementId == _tenantService.EtablissementId);
+
+            e.Property(x => x.Code).HasMaxLength(50).IsRequired();
+            e.Property(x => x.Nom).HasMaxLength(150).IsRequired();
+            e.Property(x => x.Credit).IsRequired();
+            e.Property(x => x.Semestre).IsRequired();
+
+            e.HasIndex(x => new { x.EtablissementId, x.Code }).IsUnique();
+
+            e.HasOne(x => x.FiliereNiveau)
+                .WithMany(x => x.UniteEnseignements)
+                .HasForeignKey(x => x.FiliereNiveauId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(x => x.Etablissement)
+                .WithMany(x => x.UniteEnseignements)
                 .HasForeignKey(x => x.EtablissementId)
                 .OnDelete(DeleteBehavior.Restrict);
         });

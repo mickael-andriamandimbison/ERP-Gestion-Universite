@@ -8,6 +8,7 @@ using erp_univ_back.Features.FiliereNiveau;
 using erp_univ_back.Features.Inscription;
 using erp_univ_back.Features.Niveau;
 using erp_univ_back.Features.Professeur;
+using erp_univ_back.Features.UniteEnseignement;
 using erp_univ_back.Shared.Entities;
 
 namespace erp_univ_back.Features.Etablissement
@@ -83,5 +84,6 @@ namespace erp_univ_back.Features.Etablissement
 
         public ICollection<ParentEntity> Parents { get; set; } = [];
         public ICollection<InscriptionEntity> Inscriptions { get; set; } = [];
+        public ICollection<UniteEnseignementEntity> UniteEnseignements { get; set; } = [];
     }
 }
