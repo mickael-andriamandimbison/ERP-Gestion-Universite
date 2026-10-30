@@ -47,11 +47,11 @@ public class CreateUniteEnseignementService(
             code = await codeGenerator.GenererAsync(filiereNiveau.Id, ct);
         }
 
-        var nomNormalise = request.Nom.Trim().ToLower();
+        var nomNormalise = request.Nom.Trim().ToLowerInvariant();
         var nomExiste = await db.UniteEnseignements.AnyAsync(
             u => u.FiliereNiveauId == request.FiliereNiveauId &&
                  u.Semestre == request.Semestre &&
-                 u.Nom.Equals(nomNormalise, StringComparison.InvariantCultureIgnoreCase),
+                 u.Nom.ToLowerInvariant() == nomNormalise,
             ct);
 
         if (nomExiste)
