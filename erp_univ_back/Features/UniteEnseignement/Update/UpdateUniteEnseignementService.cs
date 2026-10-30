@@ -59,7 +59,7 @@ public class UpdateUniteEnseignementService(
         }
 
         var targetNom = request.Nom.Trim();
-        var nomNormalise = targetNom.ToLower();
+        var nomNormalise = targetNom.ToLowerInvariant();
         var nomExiste = await db.UniteEnseignements.AnyAsync(
             u => u.Id != id &&
                  u.FiliereNiveauId == ue.FiliereNiveauId &&
