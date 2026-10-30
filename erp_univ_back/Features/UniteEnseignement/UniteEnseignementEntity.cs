@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Features.FiliereNiveau;
+using erp_univ_back.Features.Matiere;
 using erp_univ_back.Shared.Entities;
 
 [Table("unites_enseignement")]
@@ -30,5 +31,7 @@ public class UniteEnseignementEntity : BaseEntity
     [Required]
     public Guid EtablissementId { get; set; }
     public EtablissementEntity Etablissement { get; set; } = null!;
+
+    public ICollection<MatiereEntity> Matieres {get;set;} = [];
 }
 
