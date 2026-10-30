@@ -28,13 +28,9 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 });
 builder.Services.AddOpenApi();
 
-
-var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
-typeAdapterConfig.Scan(typeof(Program).Assembly);
-
-builder.Services.AddSingleton(typeAdapterConfig);
+Program.ConfigureMapster();
+builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 builder.Services.AddMapster();
-
 
 var app = builder.Build();
 
@@ -51,4 +47,23 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program{}
+public partial class Program
+{
+    private static bool _isMapsterConfigured;
+    private static readonly object _mapsterLock = new();
+
+    public static void ConfigureMapster()
+    {
+        if (!_isMapsterConfigured)
+        {
+            lock (_mapsterLock)
+            {
+                if (!_isMapsterConfigured)
+                {
+                    TypeAdapterConfig.GlobalSettings.Scan(typeof(Program).Assembly);
+                    _isMapsterConfigured = true;
+                }
+            }
+        }
+    }
+}
