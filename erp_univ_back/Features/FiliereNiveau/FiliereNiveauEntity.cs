@@ -6,6 +6,7 @@ using erp_univ_back.Features.Etablissement;
 using erp_univ_back.Features.Filiere;
 using erp_univ_back.Features.Inscription;
 using erp_univ_back.Features.Niveau;
+using erp_univ_back.Features.UniteEnseignement;
 using erp_univ_back.Shared.Entities;
 
 [Table("filiere_niveaux")]
@@ -24,5 +25,6 @@ public class FiliereNiveauEntity : BaseEntity
     public EtablissementEntity Etablissement { get; set; } = null!;
 
     public ICollection<InscriptionEntity> Inscriptions { get; set; } = [];
+    public ICollection<UniteEnseignementEntity> UniteEnseignements { get; set; } = [];
 }
 

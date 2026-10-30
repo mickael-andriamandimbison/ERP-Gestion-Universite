@@ -34,6 +34,7 @@ public class GetInscriptionsByClasseService(ErpUnivDbContext db) : IGetInscripti
 
         var listeAppel = await db.Inscriptions
             .AsNoTracking()
+            .Include(i => i.Etudiant)
             .Where(i => i.FiliereNiveauId == filiereNiveauId && i.AnneeAcademiqueId == anneeAcademiqueId)
             .OrderBy(i => i.Etudiant.Nom)
             .ThenBy(i => i.Etudiant.Prenom)

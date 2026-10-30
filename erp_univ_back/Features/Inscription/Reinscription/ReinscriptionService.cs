@@ -12,13 +12,9 @@ public interface IReinscriptionService
     Task<ReinscriptionResponse> ExecuteAsync(ReinscriptionRequest request, CancellationToken ct = default);
 }
 
-public interface IReinscriptionInscriptionService : IReinscriptionService
-{
-}
-
 public class ReinscriptionService(
     ErpUnivDbContext db,
-    IValidator<ReinscriptionRequest> validator) : IReinscriptionService, IReinscriptionInscriptionService
+    IValidator<ReinscriptionRequest> validator) : IReinscriptionService
 {
     public async Task<ReinscriptionResponse> ExecuteAsync(ReinscriptionRequest request, CancellationToken ct = default)
     {

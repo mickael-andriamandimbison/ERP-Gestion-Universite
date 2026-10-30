@@ -2,6 +2,7 @@ namespace erp_univ_back.Features.AnneeAcademique.Update;
 
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
+using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +11,16 @@ public interface IUpdateAnneeAcademiqueService
     Task<UpdateAnneeAcademiqueResponse> ExecuteAsync(Guid id, UpdateAnneeAcademiqueRequest request, CancellationToken ct = default);
 }
 
-public class UpdateAnneeAcademiqueService(ErpUnivDbContext _db) : IUpdateAnneeAcademiqueService
+public class UpdateAnneeAcademiqueService(ErpUnivDbContext _db, IValidator<UpdateAnneeAcademiqueRequest> _validator) : IUpdateAnneeAcademiqueService
 {
     public async Task<UpdateAnneeAcademiqueResponse> ExecuteAsync(Guid id, UpdateAnneeAcademiqueRequest request, CancellationToken ct = default)
     {
+        var verification = await _validator.ValidateAsync(request, ct);
+        if (!verification.IsValid)
+            throw new BadRequestException(verification.Errors.First().ErrorMessage);
+
         var year = await _db.AnneeAcademiques.FirstOrDefaultAsync(a => a.Id == id, ct)
             ?? throw new NotFoundException("Année académique introuvable.");
-
-        AnneeAcademiqueValidator.Valider(request.Libelle, request.DateDebut, request.DateFin);
 
         var trimmedLibelle = request.Libelle.Trim();
 

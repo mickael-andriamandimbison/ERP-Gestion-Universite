@@ -14,7 +14,6 @@ public class CreateEtudiantRequestValidator : AbstractValidator<CreateEtudiantRe
         RuleFor(x => x.Prenom)
             .MaximumLength(100).WithMessage("Le prenom de l'étudiant ne peut pas dépasser 100 caractères.");
 
-
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("L'email de l'étudiant ne peut pas être vide.")
             .MaximumLength(100).WithMessage("L'email de l'étudiant ne peut pas dépasser 100 caractères.")
@@ -25,5 +24,12 @@ public class CreateEtudiantRequestValidator : AbstractValidator<CreateEtudiantRe
             .MinimumLength(10).WithMessage("Le numéro doit contenir au moins 10 caractères.")
             .MaximumLength(15).WithMessage("Le numéro est trop long.")
             .Matches(@"^\+?[0-9]+$").WithMessage("Le numéro de téléphone ne doit contenir que des chiffres (et éventuellement un '+' au début).");
+
+        When(x => !string.IsNullOrEmpty(x.NumeroCin), () =>
+        {
+            RuleFor(x => x.NumeroCin!)
+                .Matches(@"^[0-9]{12}$")
+                .WithMessage("Le numéro CIN ne doit comporter que des chiffres et être d'une longueur de 12 caractères.");
+        });
     }
 }

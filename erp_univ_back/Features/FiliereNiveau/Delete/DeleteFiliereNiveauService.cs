@@ -19,6 +19,12 @@ public class DeleteFiliereNiveauService(ErpUnivDbContext db) : IDeleteFiliereNiv
             throw new NotFoundException($"L'association filière-niveau avec l'identifiant '{id}' n'existe pas.");
         }
 
+        var aDesInscriptions = await db.Inscriptions.AnyAsync(i => i.FiliereNiveauId == id, ct);
+        if (aDesInscriptions)
+        {
+            throw new ConflictException("Cette association filière-niveau ne peut pas être supprimée car des inscriptions y sont rattachées.");
+        }
+
         db.FiliereNiveaux.Remove(entity);
         await db.SaveChangesAsync(ct);
     }

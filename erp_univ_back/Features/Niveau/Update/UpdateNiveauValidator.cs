@@ -8,7 +8,7 @@ public class UpdateNiveauValidator : AbstractValidator<UpdateNiveauRequest>
     {
         RuleFor(x => x.Code)
             .NotEmpty().WithMessage("Le code du niveau est obligatoire.")
-            .MaximumLength(20).WithMessage("Le code ne doit pas dépasser 20 caractères.");
+            .MaximumLength(10).WithMessage("Le code ne doit pas dépasser 10 caractères.");
 
         RuleFor(x => x.Nom)
             .NotEmpty().WithMessage("Le nom du niveau est obligatoire.")

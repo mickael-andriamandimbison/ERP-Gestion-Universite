@@ -8,18 +8,6 @@ public record ReinscriptionRequest(
     Guid AnneeAcademiqueId
 );
 
-public record ReinscriptionInscriptionRequest(
-    Guid EtudiantId,
-    Guid FiliereNiveauId,
-    Guid AnneeAcademiqueId
-) : ReinscriptionRequest(EtudiantId, FiliereNiveauId, AnneeAcademiqueId);
-
-public record CreateInscriptionRequest(
-    Guid EtudiantId,
-    Guid FiliereNiveauId,
-    Guid AnneeAcademiqueId
-) : ReinscriptionRequest(EtudiantId, FiliereNiveauId, AnneeAcademiqueId);
-
 public record ReinscriptionResponse(
     Guid Id,
     Guid EtudiantId,
@@ -34,30 +22,3 @@ public record ReinscriptionResponse(
     DateTime DateCreation
 );
 
-public record ReinscriptionInscriptionResponse(
-    Guid Id,
-    Guid EtudiantId,
-    string EtudiantNom,
-    string EtudiantPrenom,
-    string EtudiantMatricule,
-    Guid FiliereNiveauId,
-    string ClasseLibelle,
-    Guid AnneeAcademiqueId,
-    string AnneeAcademiqueLibelle,
-    StatutInscription Statut,
-    DateTime DateCreation
-) : ReinscriptionResponse(Id, EtudiantId, EtudiantNom, EtudiantPrenom, EtudiantMatricule, FiliereNiveauId, ClasseLibelle, AnneeAcademiqueId, AnneeAcademiqueLibelle, Statut, DateCreation);
-
-public record CreateInscriptionResponse(
-    Guid Id,
-    Guid EtudiantId,
-    string EtudiantNom,
-    string EtudiantPrenom,
-    string EtudiantMatricule,
-    Guid FiliereNiveauId,
-    string ClasseLibelle,
-    Guid AnneeAcademiqueId,
-    string AnneeAcademiqueLibelle,
-    StatutInscription Statut,
-    DateTime DateCreation
-) : ReinscriptionResponse(Id, EtudiantId, EtudiantNom, EtudiantPrenom, EtudiantMatricule, FiliereNiveauId, ClasseLibelle, AnneeAcademiqueId, AnneeAcademiqueLibelle, Statut, DateCreation);

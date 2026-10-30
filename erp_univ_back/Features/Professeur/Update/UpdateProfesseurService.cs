@@ -1,5 +1,6 @@
 using erp_univ_back.Shared.Data;
 using erp_univ_back.Shared.Exceptions;
+using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,16 @@ public interface IUpdateProfesseurService
     Task<UpdateProfesseurResponse> ExecuteAsync(Guid id, UpdateProfesseurRequest request, CancellationToken ct = default);
 }
 
-public class UpdateProfesseurService(ErpUnivDbContext _db) : IUpdateProfesseurService
+public class UpdateProfesseurService(
+    ErpUnivDbContext _db,
+    IValidator<UpdateProfesseurRequest> _validator) : IUpdateProfesseurService
 {
     public async Task<UpdateProfesseurResponse> ExecuteAsync(Guid id, UpdateProfesseurRequest request, CancellationToken ct = default)
     {
+        var validationResult = await _validator.ValidateAsync(request, ct);
+        if (!validationResult.IsValid)
+            throw new BadRequestException(validationResult.Errors.First().ErrorMessage);
+
         var prof = await _db.Professeurs.FirstOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new NotFoundException("Professeur introuvable.");
 

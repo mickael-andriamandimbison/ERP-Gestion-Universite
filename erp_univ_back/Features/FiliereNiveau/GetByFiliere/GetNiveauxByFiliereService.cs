@@ -22,6 +22,7 @@ public class GetNiveauxByFiliereService(ErpUnivDbContext db) : IGetNiveauxByFili
 
         var filiereNiveaux = await db.FiliereNiveaux
             .AsNoTracking()
+            .Include(fn => fn.Niveau)
             .Where(fn => fn.FiliereId == filiereId)
             .OrderBy(fn => fn.Niveau.Ordre)
             .ProjectToType<GetNiveauxByFiliereResponse>()
