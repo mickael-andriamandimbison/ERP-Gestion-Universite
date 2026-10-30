@@ -12,6 +12,8 @@ using erp_univ_back.Features.FiliereNiveau;
 using erp_univ_back.Features.Inscription;
 using erp_univ_back.Features.UniteEnseignement;
 using erp_univ_back.Shared.Entities;
+using erp_univ_back.Features.Matiere;
+
 
 public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenantService _tenantService) : DbContext(options)
 {
@@ -26,7 +28,8 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
     public DbSet<FiliereNiveauEntity> FiliereNiveaux { get; set; } = null!;
     public DbSet<InscriptionEntity> Inscriptions { get; set; } = null!;
     public DbSet<UniteEnseignementEntity> UniteEnseignements { get; set; } = null!;
-
+    public DbSet<MatiereEntity> Matieres { get; set; } = null!;
+    
     protected override void OnModelCreating(ModelBuilder mb)
     {
         base.OnModelCreating(mb);
@@ -253,6 +256,29 @@ public class ErpUnivDbContext(DbContextOptions<ErpUnivDbContext> options, ITenan
                 .WithMany(x => x.UniteEnseignements)
                 .HasForeignKey(x => x.EtablissementId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // --- 12. matieres ---
+        mb.Entity<MatiereEntity>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasQueryFilter(x => x.EtablissementId == _tenantService.EtablissementId);
+
+            e.Property(x => x.Code).HasMaxLength(50).IsRequired();
+            e.Property(x => x.Nom).HasMaxLength(150).IsRequired();
+            e.Property(x=>x.Coefficient).IsRequired();
+
+            e.HasOne(x => x.Etablissement)
+            .WithMany(x => x.Matieres)
+            .HasForeignKey(x => x.EtablissementId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(x=>x.UniteEnseignement)
+            .WithMany(x=>x.Matieres)
+            .HasForeignKey(x=>x.UniteEnseignementId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
         });
     }
 

@@ -17,11 +17,11 @@ public class UniteEnseignementMapping : IRegister
             .Map(dest => dest.Semestre, src => src.Semestre)
             .Map(dest => dest.FiliereNiveauId, src => src.FiliereNiveauId)
             .Map(dest => dest.FiliereNiveauLibelle, src => 
-                (src.FiliereNiveau.LibelleAffiche != null 
+                src.FiliereNiveau.LibelleAffiche != null 
                     ? src.FiliereNiveau.LibelleAffiche.Replace(" - ", "-") 
                     : (src.FiliereNiveau.Filiere != null && src.FiliereNiveau.Niveau != null 
                         ? $"{src.FiliereNiveau.Filiere.Nom.Trim()}-{src.FiliereNiveau.Niveau.Code.Trim()}".Replace(" - ", "-") 
-                        : "")))
+                        : ""))
             .Map(dest => dest.DateCreation, src => src.DateCreation);
 
         config.NewConfig<UniteEnseignementEntity, UpdateUniteEnseignementResponse>()
@@ -32,11 +32,11 @@ public class UniteEnseignementMapping : IRegister
             .Map(dest => dest.Semestre, src => src.Semestre)
             .Map(dest => dest.FiliereNiveauId, src => src.FiliereNiveauId)
             .Map(dest => dest.FiliereNiveauLibelle, src => 
-                (src.FiliereNiveau.LibelleAffiche != null 
+                src.FiliereNiveau.LibelleAffiche != null 
                     ? src.FiliereNiveau.LibelleAffiche.Replace(" - ", "-") 
                     : (src.FiliereNiveau.Filiere != null && src.FiliereNiveau.Niveau != null 
                         ? $"{src.FiliereNiveau.Filiere.Nom.Trim()}-{src.FiliereNiveau.Niveau.Code.Trim()}".Replace(" - ", "-") 
-                        : "")))
+                        : ""))
             .Map(dest => dest.DateModification, src => src.DateModification);
 
         config.NewConfig<UniteEnseignementEntity, GetUniteEnseignementByIdResponse>()
@@ -47,11 +47,11 @@ public class UniteEnseignementMapping : IRegister
             .Map(dest => dest.Semestre, src => src.Semestre)
             .Map(dest => dest.FiliereNiveauId, src => src.FiliereNiveauId)
             .Map(dest => dest.FiliereNiveauLibelle, src => 
-                (src.FiliereNiveau.LibelleAffiche != null 
+                src.FiliereNiveau.LibelleAffiche != null 
                     ? src.FiliereNiveau.LibelleAffiche.Replace(" - ", "-") 
                     : (src.FiliereNiveau.Filiere != null && src.FiliereNiveau.Niveau != null 
                         ? $"{src.FiliereNiveau.Filiere.Nom.Trim()}-{src.FiliereNiveau.Niveau.Code.Trim()}".Replace(" - ", "-") 
-                        : "")))
+                        : ""))
             .Map(dest => dest.FiliereId, src => src.FiliereNiveau.FiliereId)
             .Map(dest => dest.FiliereNom, src => src.FiliereNiveau.Filiere.Nom)
             .Map(dest => dest.NiveauId, src => src.FiliereNiveau.NiveauId)
