@@ -28,7 +28,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 });
 builder.Services.AddOpenApi();
 
-Program.ConfigureMapster();
+ConfigureMapster();
 builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 builder.Services.AddMapster();
 

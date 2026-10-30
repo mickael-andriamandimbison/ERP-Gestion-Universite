@@ -51,7 +51,7 @@ public class CreateUniteEnseignementService(
         var nomExiste = await db.UniteEnseignements.AnyAsync(
             u => u.FiliereNiveauId == request.FiliereNiveauId &&
                  u.Semestre == request.Semestre &&
-                 u.Nom.Equals(nomNormalise, StringComparison.InvariantCultureIgnoreCase),
+                 u.Nom.ToLower() == nomNormalise,
             ct);
 
         if (nomExiste)
